@@ -5,9 +5,7 @@ A console app for managing customer orders and track sales progress.
 ### Customer Options
 A customer can select from different options:
 
-Menu overview
-Place orders
-Receive invoice
+Menu overview, place order, receive invoice.
 
 In the menu overview, the customer sees all the products of the confectionery with the following attributes: ID, Name, Price, Allergens, Calories, Weight.
 
