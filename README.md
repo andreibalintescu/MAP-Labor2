@@ -1,21 +1,26 @@
 
 # Confectionery
-A console app for managing customer orders and track sales progress.
 
+An Confectionery needs a console app for managing customer orders and track sales progress. Customers will have the ability to explore products, place orders, and receive invoices, while administrators will oversee operations and financial tracking.
 
 ### Customer Options
-A customer can select from different options:
+When customers enter the app, they will have access to the following features:
 
-Menu overview, place order, receive invoice.
+Menu Overview: Customers can view all available products, which include cakes and drinks with the following attributes: ID, Name, Price, Allergens, Calories, Weight.
 
-In the menu overview, the customer sees all the products of the confectionery with the following attributes: ID, Name, Price, Allergens, Calories, Weight.
+Place Order: Customers can select products they wish to purchase and add them to a virtual basket.
 
-For placing an order, the customer selects the products they wish to purchase.
+Receive Invoice: Once the order is placed, customers will receive an invoice detailing: The items ordered, the total amount to be paid.
 
-The invoice shows the customer the total amount they need to pay.
+ ### Admin Options
+Administrators will have the following functionalities upon logging into the application:
 
-### Admin Options
-The administrator can view the balance by checking the income per month and year.
+Admin Login: The admin must log in using a secure username and password.
 
-The customer with the most orders in a year wins a trip🎉
-![UML_Diagram_Labor2](https://github.com/user-attachments/assets/61ef12f7-d77b-492f-9a41-53c704408a10)
+View Financials: Administrators can view income reports, including monthly and yearly income.
+This feature helps in tracking sales performance and making informed business decisions.
+
+Customer Recognition Program:
+At the end of the year, the customer with the most orders will be recognized and awarded a trip as a special incentive.
+
+![UMLDiagram](https://github.com/user-attachments/assets/67652380-8808-4a5d-b6d7-d24aaef5687e)
