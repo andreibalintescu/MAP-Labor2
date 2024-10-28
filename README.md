@@ -1,4 +1,4 @@
-![UML_Diagram_Labor2](https://github.com/user-attachments/assets/61ef12f7-d77b-492f-9a41-53c704408a10)
+
 # Confectionery
 A console app for managing customer orders and track sales progress.
 
@@ -18,3 +18,4 @@ The invoice shows the customer the total amount they need to pay.
 The administrator can view the balance by checking the income per month and year.
 
 The customer with the most orders in a year wins a trip🎉
+![UML_Diagram_Labor2](https://github.com/user-attachments/assets/61ef12f7-d77b-492f-9a41-53c704408a10)
