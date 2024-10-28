@@ -1,3 +1,4 @@
+![UML_Diagram_Labor2](https://github.com/user-attachments/assets/61ef12f7-d77b-492f-9a41-53c704408a10)
 # Confectionery
 A console app for managing customer orders and track sales progress.
 
