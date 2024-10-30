@@ -23,4 +23,5 @@ This feature helps in tracking sales performance and making informed business de
 Customer Recognition Program:
 At the end of the year, the customer with the most orders will be recognized and awarded a trip as a special incentive.
 
-![UMLDiagram](https://github.com/user-attachments/assets/67652380-8808-4a5d-b6d7-d24aaef5687e)
+
+![uml](https://github.com/user-attachments/assets/a861a701-d326-4500-8140-ced3e1d0d891)
