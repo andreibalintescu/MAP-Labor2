@@ -60,4 +60,15 @@ public class Product implements HasID {
     public Integer getID() {
        return idProduct;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "idProduct=" + idProduct +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", weight=" + weight +
+                ", expirationDate=" + expirationDate +
+                '}';
+    }
 }
