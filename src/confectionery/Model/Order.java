@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Order implements HasID {
     private List<Product> products;
-    private float totalPrice = 0;
+    private float totalPrice;
     private Integer orderID;
     private LocalDate date;
 
@@ -16,6 +16,7 @@ public class Order implements HasID {
     }
 
     public float getTotal() {
+        totalPrice = 0;
         for (Product p : this.products) {
             this.totalPrice += p.getPrice();
         }

@@ -16,7 +16,7 @@ public class Balance {
         this.balance = calculateTotalBalance();
     }
 
-    private float calculateTotalBalance() {
+    public float calculateTotalBalance() {
         return (float) orders.stream().mapToDouble(Order::getTotal).sum();
     }
 

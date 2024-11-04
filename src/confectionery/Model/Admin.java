@@ -8,6 +8,7 @@ public class Admin extends User {
     private final String email;
     private final Integer id;
     private Balance balance;
+
     public Admin(String password, String email, Integer id, String name, String address, Balance balance) {
         super(name, address);
         this.password = password;
@@ -40,5 +41,9 @@ public class Admin extends User {
 
     public float getYearlyBalance(Year year) {
         return balance.yearlyBalance(year);
+    }
+
+    public float getBalance() {
+        return balance.calculateTotalBalance();
     }
 }
