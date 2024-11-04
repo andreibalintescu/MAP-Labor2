@@ -2,6 +2,7 @@ package confectionery.Model;
 
 import java.sql.SQLOutput;
 import java.util.List;
+import java.util.Scanner;
 
 public class Client extends User {
     private final Integer ClientID;
@@ -14,9 +15,9 @@ public class Client extends User {
     }
 
     @Override
-    public boolean login() {
+    public boolean login(Scanner scanner) {
         System.out.print("Press Enter to log in as Client: ");
-        String input = new java.util.Scanner(System.in).nextLine();
+        String input = scanner.nextLine();
         return input.isEmpty();
     }
 

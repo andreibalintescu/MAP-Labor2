@@ -29,9 +29,9 @@ public class Balance {
     }
 
     // Calculate yearly balance by filtering orders by year using LocalDateTime
-    public float yearlyBalance(Year year) {
+    public float yearlyBalance(int year) {
         return (float) orders.stream()
-                .filter(order -> order.getDate().getYear() == year.getValue())
+                .filter(order -> order.getDate().getYear() == year)
                 .mapToDouble(Order::getTotal)
                 .sum();
     }

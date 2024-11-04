@@ -2,6 +2,7 @@ package confectionery.Model;
 
 import java.time.Month;
 import java.time.Year;
+import java.util.Scanner;
 
 public class Admin extends User {
     private final String password;
@@ -24,9 +25,7 @@ public class Admin extends User {
     }
 
     @Override
-    public boolean login() {
-        java.util.Scanner scanner = new java.util.Scanner(System.in);
-
+    public boolean login(Scanner scanner) {
         System.out.print("Enter email: ");
         String inputEmail = scanner.nextLine();
         System.out.print("Enter password: ");
@@ -36,14 +35,17 @@ public class Admin extends User {
     }
 
     public float getMonthlyBalance(Month month) {
+        System.out.println("Monthly balance for month " + month);
         return balance.monthlyBalance(month);
     }
 
-    public float getYearlyBalance(Year year) {
+    public float getYearlyBalance(int year) {
+        System.out.println("Yearly balance for year " + year);
         return balance.yearlyBalance(year);
     }
 
     public float getBalance() {
+        System.out.println("Total balance:");
         return balance.calculateTotalBalance();
     }
 }
