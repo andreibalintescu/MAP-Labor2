@@ -1,4 +1,4 @@
-package Model;
+package confectionery.Model;
 
 public class Drinks extends Product {
     float alcoholPercentage;

@@ -1,8 +1,8 @@
-package Model;
+package confectionery.Model;
 
 import java.util.List;
 
-public class Cakes extends Product implements HasAllergens {
+public class Cakes extends Product {
     int calories;
     List<String> Allergens;
     public Cakes(int idProduct, String name, float price, float weight, ExpirationDate expirationDate, int calories, List<String> Allergens) {
