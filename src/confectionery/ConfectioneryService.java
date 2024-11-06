@@ -2,20 +2,25 @@ package confectionery;
 
 import java.util.List;
 
-import confectionery.Model.Product;
+import confectionery.Model.Cake;
+import confectionery.Model.Drink;
 import confectionery.Repository.Repository;
 
 public class ConfectioneryService {
 
 
-    private final Repository<Product> menu;
+    private final Repository<Cake> menu;
+    private final Repository<Drink> drink;
 
-
-    public ConfectioneryService(Repository<Product> menu) {
+    public ConfectioneryService(Repository<Cake> menu, Repository<Drink> drinksrepo) {
         this.menu = menu;
+        this.drink = drinksrepo;
     }
 
-    public List<Product> getMenu() {
+    public List<Cake> getCakes() {
         return menu.getAll();
+    }
+    public List<Drink> getDrinks() {
+        return drink.getAll();
     }
 }

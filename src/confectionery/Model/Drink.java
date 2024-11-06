@@ -9,4 +9,16 @@ public class Drink extends Product {
     public void viewAlcoholPercentage() {
         System.out.println("Alcohol Percentage: " + alcoholPercentage);
     }
+
+    @Override
+    public String toString() {
+        return "Drink{" +
+                "id="+getID()+
+                ", name='"+getName()+
+                ", price="+getPrice()+
+                ", weight="+getWeight()+
+                "," +getExpirationDate()+
+                ", alcoholPercentage=" + alcoholPercentage +
+                '}';
+    }
 }
