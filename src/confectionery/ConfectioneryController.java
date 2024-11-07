@@ -17,4 +17,12 @@ public class ConfectioneryController {
         System.out.println(output);
     }
 
+    public void placeOrderCake(Integer productId) {
+        confectioneryService.orderCake(productId);
+        System.out.println("order placed for product with id " + productId );
+    }
+    public void placeOrderDrink(Integer productId) {
+        confectioneryService.orderDrink(productId);
+        System.out.println("order placed for product with id " + productId );
+    }
 }

@@ -1,8 +1,13 @@
 package confectionery.Model;
 
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 public class Cake extends Product {
     int calories;
+    private List<Cake> orderedCakes = new ArrayList<>();
     public Cake(int idProduct, String name, float price, float weight, ExpirationDate expirationDate, int calories) {
         super(idProduct, name, price, weight, expirationDate);
         this.calories=calories;
@@ -22,5 +27,11 @@ public class Cake extends Product {
                 "calories=" + calories +
                 '}';
     }
+
+    public List<Cake> getOrderedCakes() {
+        return orderedCakes;
+    }
+
+
 }
 

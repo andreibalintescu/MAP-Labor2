@@ -29,8 +29,9 @@ public class ConsoleApp {
                     Select an option:
 
                     1.View Menu
-                    2.Place Order
-                    3.GetInvoice
+                    2.Place Order for a Cake
+                    3.Place Order for a Drink
+                    4.GetInvoice
                     0. Exit
                     """);
 
@@ -43,13 +44,20 @@ public class ConsoleApp {
                 case "1":
                     confectioneryController.viewMenu();
                     break;
-
+                case "2":
+                    confectioneryController.placeOrderCake(readProductId(scanner));
+                    break;
+                case "3":
+                    confectioneryController.placeOrderDrink(readProductId(scanner));
                 default:
             }
         }
     }
 
-
+    private static int readProductId(Scanner scanner) {
+        System.out.print("Enter the Product ID that you want to order: ");
+        return Integer.parseInt(scanner.nextLine());
+    }
    
     public static void main(String[] args) {
         Repository<Cake> cakesrepo = createInMemoryCakesRepository();

@@ -1,7 +1,11 @@
 package confectionery.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Drink extends Product {
     float alcoholPercentage;
+    private List<Drink> orderedDrinks = new ArrayList<>();
     public Drink(int idProduct, String name, float price, float weight, ExpirationDate expirationDate, float alcohol) {
         super(idProduct, name, price, weight, expirationDate);
         this.alcoholPercentage = alcohol;
@@ -20,5 +24,9 @@ public class Drink extends Product {
                 "," +getExpirationDate()+
                 ", alcoholPercentage=" + alcoholPercentage +
                 '}';
+    }
+
+    public List<Drink> getOrderdDrinks() {
+        return orderedDrinks;
     }
 }

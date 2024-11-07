@@ -12,9 +12,9 @@ public class ConfectioneryService {
     private final Repository<Cake> menu;
     private final Repository<Drink> drink;
 
-    public ConfectioneryService(Repository<Cake> menu, Repository<Drink> drinksrepo) {
+    public ConfectioneryService(Repository<Cake> menu, Repository<Drink> drink) {
         this.menu = menu;
-        this.drink = drinksrepo;
+        this.drink = drink;
     }
 
     public List<Cake> getCakes() {
@@ -22,5 +22,19 @@ public class ConfectioneryService {
     }
     public List<Drink> getDrinks() {
         return drink.getAll();
+    }
+
+    public void orderCake(Integer productId) {
+        Cake orderedCake= menu.get(productId);
+        orderedCake.getOrderedCakes().add(orderedCake);
+        menu.update(orderedCake);
+
+        }
+
+    public void orderDrink(Integer productId) {
+        Drink orderedDrink = drink.get(productId);
+        orderedDrink.getOrderdDrinks().add(orderedDrink);
+        drink.update(orderedDrink);
+
     }
 }
