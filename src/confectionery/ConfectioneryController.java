@@ -15,11 +15,7 @@ public class ConfectioneryController {
     }
 
 
-    // General functions
-    public void authenticate(Scanner scanner) {
-
-    }
-    public void viewMenu() {
+     void viewMenu() {
         StringBuilder output = new StringBuilder("Cakes and Drinks :\n");
         confectioneryService.getCakes().forEach(product -> output.append(product.toString()).append("\n"));
         confectioneryService.getDrinks().forEach(product -> output.append(product.toString()).append("\n"));
@@ -30,11 +26,6 @@ public class ConfectioneryController {
         StringBuilder output = new StringBuilder("Users :\n");
         confectioneryService.getUsers().forEach(user -> output.append(user.toString()).append("\n"));
         System.out.println(output);
-    }
-    // Client-specific functions
-    public boolean loginClient(Scanner scanner) {
-        return confectioneryService.authenticateClient();
-
     }
 
     public void placeOrder(Scanner scanner) {
@@ -48,23 +39,17 @@ public class ConfectioneryController {
 
 
         Order order = confectioneryService.placeOrder(cakeIds, drinkIds);
-        System.out.println("Your order has been placed. Order ID: " + order.getID());
-    }
 
-    public void getInvoice(Scanner scanner) {
-        System.out.print("Enter your Order ID to get the invoice: ");
-        int orderId = Integer.parseInt(scanner.nextLine());
-
-        Order order = confectioneryService.getOrderById(orderId);
-        if (order != null) {
-            System.out.println("Invoice for Order ID: " + order.getID());
-            System.out.println("Total: " + order.getTotal());
+        Client loggedInClient = (Client) confectioneryService.getLoggedInUser(); // Obținem clientul logat
+        if (loggedInClient != null) {
+            loggedInClient.placeOrder(order);
+            System.out.println("Your order has been placed. Order ID: " + order.getID());
         } else {
-            System.out.println("Order not found!");
+            System.out.println("No client logged in.");
         }
     }
 
-    //Admin-specific functions
+
     public boolean loginAdmin(Scanner scanner) {
         System.out.print("Enter email:");
         String email = scanner.nextLine();
@@ -77,8 +62,21 @@ public class ConfectioneryController {
         System.out.println("Failed to log in!");
         return false;
     }
-    public void getMonthlyBalance() {
+    public boolean loginClient(Scanner scanner) {
+        System.out.print("Enter username:");
+        String username = scanner.nextLine();
 
+        Client client = (Client) confectioneryService.getUsers().stream()
+                .filter(user -> user instanceof Client && ((Client) user).getUsername().equals(username))
+                .findFirst().orElse(null);
+
+        if (client != null) {
+            confectioneryService.setLoggedInUser(client);
+            System.out.println("You have logged in as a client!");
+            return true;
+        }
+        System.out.println("Failed to log in!");
+        return false;
     }
 
     //Misc.
@@ -93,5 +91,14 @@ public class ConfectioneryController {
         return ids;
     }
 
+    public void gettBalance() {
+        float balance = confectioneryService.getBalance();
+        System.out.println("The total balance for this month is: " + balance + "lei");
 
+    }
+
+    public void generateInvoice() {
+        Client loggedInClient = (Client) confectioneryService.getLoggedInUser(); // Obținem clientul logat
+        loggedInClient.getInvoice();
+    }
 }

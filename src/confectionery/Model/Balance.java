@@ -5,16 +5,17 @@ import confectionery.Model.Order;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Balance {
     private float balance;
-    private List<Order> orders;
+    private List<Order> orders=new ArrayList<>();
 
-    public Balance(List<Order> orders) {
-        this.orders = orders;
-        this.balance = calculateTotalBalance();
-    }
+//    public Balance(List<Order> orders) {
+//        this.orders = orders;
+//        this.balance = calculateTotalBalance();
+//    }
 
     public float calculateTotalBalance() {
         return (float) orders.stream().mapToDouble(Order::getTotal).sum();

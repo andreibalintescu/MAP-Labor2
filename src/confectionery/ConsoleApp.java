@@ -66,7 +66,7 @@ public class ConsoleApp {
             switch (option) {
                 case "1" -> confectioneryController.viewMenu();
                 case "2" -> confectioneryController.placeOrder(scanner);
-                case "3" -> confectioneryController.getInvoice(scanner);
+                case "3" -> confectioneryController.generateInvoice();
                 case "0" -> clientRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -85,7 +85,7 @@ public class ConsoleApp {
 
             String option = scanner.nextLine();
             switch (option) {
-                case "1" -> confectioneryController.getMonthlyBalance();
+                case "1" -> confectioneryController.gettBalance();
                 case "0" -> adminRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
