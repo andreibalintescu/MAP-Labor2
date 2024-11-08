@@ -22,4 +22,13 @@ public class ExpirationDate {
     public Day getDay() {
         return day;
     }
+
+    @Override
+    public String toString() {
+        return "ExpirationDate{" +
+                "year=" + year +
+                ", month=" + month +
+                ", day=" + day +
+                '}';
+    }
 }

@@ -11,5 +11,16 @@ public class Cake extends Product {
         System.out.println("Calories: "+calories);
     }
 
+    @Override
+    public String toString() {
+        return "Cake{" +
+                "id="+getID()+
+                ", name='"+getName()+
+                ", price="+getPrice()+
+                ", weight="+getWeight()+
+                ","+getExpirationDate()+
+                "calories=" + calories +
+                '}';
     }
+}
 
