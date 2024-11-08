@@ -1,9 +1,6 @@
 package confectionery;
 
-import confectionery.Model.Cake;
-import confectionery.Model.Drink;
-import confectionery.Model.Order;
-import confectionery.Model.Product;
+import confectionery.Model.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
