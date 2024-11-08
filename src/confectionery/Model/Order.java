@@ -1,10 +1,11 @@
 package confectionery.Model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order implements HasID {
-    private List<Product> products;
+    private List<Product> products=new ArrayList<>();
     private float totalPrice;
     private Integer orderID;
     private LocalDate date;
@@ -40,4 +41,6 @@ public class Order implements HasID {
     public Integer getID() {
         return this.orderID;
     }
+
+
 }

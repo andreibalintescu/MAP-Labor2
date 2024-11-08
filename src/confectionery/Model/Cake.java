@@ -1,6 +1,10 @@
 package confectionery.Model;
 
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 public class Cake extends Product {
     int calories;
     public Cake(int idProduct, String name, float price, float weight, ExpirationDate expirationDate, int calories) {
@@ -22,5 +26,9 @@ public class Cake extends Product {
                 "calories=" + calories +
                 '}';
     }
+
+
+
+
 }
 

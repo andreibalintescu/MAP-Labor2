@@ -1,5 +1,8 @@
 package confectionery.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Drink extends Product {
     float alcoholPercentage;
     public Drink(int idProduct, String name, float price, float weight, ExpirationDate expirationDate, float alcohol) {
@@ -21,4 +24,6 @@ public class Drink extends Product {
                 ", alcoholPercentage=" + alcoholPercentage +
                 '}';
     }
+
+
 }
