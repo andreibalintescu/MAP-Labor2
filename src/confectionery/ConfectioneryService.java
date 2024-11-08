@@ -3,11 +3,9 @@ package confectionery;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import confectionery.Model.Cake;
-import confectionery.Model.Drink;
-import confectionery.Model.Product;
-import confectionery.Model.Order;
+import confectionery.Model.*;
 import confectionery.Repository.Repository;
 
 public class ConfectioneryService {
@@ -16,13 +14,15 @@ public class ConfectioneryService {
     private final Repository<Cake> menu;
     private final Repository<Drink> drink;
     private final Repository<Order> orderRepository;
+    private final Repository<User> users;
     private int orderIdCounter = 1;
 
 
-    public ConfectioneryService(Repository<Cake> menu, Repository<Drink> drink,Repository<Order> orderRepository) {
+    public ConfectioneryService(Repository<Cake> menu, Repository<Drink> drink, Repository<Order> orderRepository, Repository<User> users) {
         this.menu = menu;
         this.drink = drink;
         this.orderRepository = orderRepository;
+        this.users = users;
     }
 
     public List<Cake> getCakes() {
@@ -31,6 +31,7 @@ public class ConfectioneryService {
     public List<Drink> getDrinks() {
         return drink.getAll();
     }
+    public List<User> getUsers() {return users.getAll();}
 
 
     public Order placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
@@ -83,5 +84,15 @@ public class ConfectioneryService {
             }
         }
         return null;
+    }
+
+    public boolean authenticateAdmin(String email, String password) {
+               return users.getAll().stream().filter(user -> user instanceof Admin)
+                .map(user -> (Admin) user) // Downcast to access attributes
+                .anyMatch(admin -> admin.getEmail().equals(email) && admin.getPassword().equals(password));
+
+    }
+    public boolean authenticateClient() {
+        return true;
     }
 }

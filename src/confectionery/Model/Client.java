@@ -8,10 +8,9 @@ public class Client extends User {
     private final Integer ClientID;
     private List<Order> orders;
 
-    public Client(String name, String address, Integer Id, List<Order> orders) {
+    public Client(String name, String address, Integer Id) {
         super(name, address);
         this.ClientID = Id;
-        this.orders = orders;
     }
 
     @Override
@@ -42,5 +41,9 @@ public class Client extends User {
             }
             System.out.println("Your total is: " + order.getTotal());
         }
+    }
+
+    public String toString(){
+        return "Client: " + "id " + ClientID + "," + "name " + name + "," + "address " + address;
     }
 }

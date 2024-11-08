@@ -12,43 +12,82 @@ import confectionery.Repository.Repository;
 public class ConsoleApp {
 
     private final ConfectioneryController confectioneryController;
+    private final Scanner scanner;
 
     public ConsoleApp(ConfectioneryController confectioneryController) {
         this.confectioneryController = confectioneryController;
+        this.scanner = new Scanner(System.in);
     }
 
     
     public void start() {
-        Scanner scanner = new Scanner(System.in);
-        boolean continueLoop = true;
+        boolean running = true;
 
-        while (continueLoop) {
+        while (running) {
             System.out.print("""
-                    Please select from the following options:
-
-                        1.View Menu
-                        2.Place Order :)
-                        3.GetInvoice
-                        0. Exit
+                    Welcome to the Confectionery App!
+                    1. Login as Administrator
+                    2. Login as Client
+                    0. Exit
+                    Please select an option: 
                     """);
 
             String option = scanner.nextLine();
-
             switch (option) {
-                case "0":
-                    continueLoop = false;
-                    break;
                 case "1":
-                    confectioneryController.viewMenu();
+                    if(confectioneryController.loginAdmin(scanner))
+                        adminMenu();
                     break;
                 case "2":
-                    confectioneryController.placeOrder(scanner);
+                    if(confectioneryController.loginClient(scanner))
+                        clientMenu();
                     break;
-                case "3":
-                    confectioneryController.getInvoice(scanner);
+                case "0":
+                    System.out.println("Thank you for using Confectionery!");
+                    running = false;
                     break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+
+    }
+    private void clientMenu() {
+        boolean clientRunning = true;
+        while (clientRunning) {
+            System.out.print("""
+                    Client Menu:
+                    1. View Menu
+                    2. Place Order
+                    3. Generate Invoice
+                    0. Logout
+                    Please select an option: 
+                    """);
+
+            String option = scanner.nextLine();
+            switch (option) {
+                case "1" -> confectioneryController.viewMenu();
+                case "2" -> confectioneryController.placeOrder(scanner);
+                case "3" -> confectioneryController.getInvoice(scanner);
+                case "0" -> clientRunning = false;
+                default -> System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private void adminMenu() {
+        boolean adminRunning = true;
+        while (adminRunning) {
+            System.out.print("""
+                    Admin Menu:
+                    1. View Monthly Balance
+                    0. Logout
+                    Please select an option: 
+                    """);
+
+            String option = scanner.nextLine();
+            switch (option) {
+                case "1" -> confectioneryController.getMonthlyBalance();
+                case "0" -> adminRunning = false;
+                default -> System.out.println("Invalid option. Please try again.");
             }
         }
     }
@@ -60,8 +99,9 @@ public class ConsoleApp {
         Repository<Cake> cakesrepo = createInMemoryCakesRepository();
         Repository<Drink> drinksrepo=createInMemoryDrinksRepository();
         Repository<Order> orderRepo = new InMemoryRepository();
+        Repository<User> userRepo = createInMemoryUsersRepository();
 
-        ConfectioneryService confectioneryService = new ConfectioneryService(cakesrepo,drinksrepo,orderRepo);
+        ConfectioneryService confectioneryService = new ConfectioneryService(cakesrepo,drinksrepo,orderRepo,userRepo);
         ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);
 
         ConsoleApp consoleApp = new ConsoleApp(confectioneryController);
@@ -114,5 +154,14 @@ public class ConsoleApp {
         drinksRepository.create(new Drink(20, "Hot Chocolate", 20, 200, expirationDate10, 0));
 
         return drinksRepository;
+    }
+
+    private static Repository<User> createInMemoryUsersRepository() {
+        Repository<User> usersRepository = new InMemoryRepository<>();
+        usersRepository.create(new Client("Andrei", "Bujoreni", 123));
+        usersRepository.create(new Client("Maria", "Bujoreni", 312));
+        usersRepository.create(new Client("Ioana", "Bujoreni", 231));
+        usersRepository.create(new Admin("admin", "admin@gmail.com", 333, "Bali", "Bujoreni"));
+        return usersRepository;
     }
 }
