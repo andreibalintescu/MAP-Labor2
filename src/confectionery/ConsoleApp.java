@@ -1,10 +1,7 @@
 package confectionery;
 
 import java.util.Scanner;
-import java.util.stream.IntStream;
 
-import confectionery.ConfectioneryController;
-import confectionery.ConfectioneryService;
 import confectionery.Model.*;
 
 
@@ -26,13 +23,12 @@ public class ConsoleApp {
 
         while (continueLoop) {
             System.out.print("""
-                    Select an option:
+                    Please select from the following options:
 
-                    1.View Menu
-                    2.Place Order for a Cake
-                    3.Place Order for a Drink
-                    4.GetInvoice
-                    0. Exit
+                        1.View Menu
+                        2.Place Order :)
+                        3.GetInvoice
+                        0. Exit
                     """);
 
             String option = scanner.nextLine();
@@ -45,25 +41,26 @@ public class ConsoleApp {
                     confectioneryController.viewMenu();
                     break;
                 case "2":
-                    confectioneryController.placeOrderCake(readProductId(scanner));
+                    confectioneryController.placeOrder(scanner);
                     break;
                 case "3":
-                    confectioneryController.placeOrderDrink(readProductId(scanner));
+                    confectioneryController.getInvoice(scanner);
+                    break;
                 default:
+                    System.out.println("Invalid option. Please try again.");
             }
         }
     }
 
-    private static int readProductId(Scanner scanner) {
-        System.out.print("Enter the Product ID that you want to order: ");
-        return Integer.parseInt(scanner.nextLine());
-    }
+
+
    
     public static void main(String[] args) {
         Repository<Cake> cakesrepo = createInMemoryCakesRepository();
         Repository<Drink> drinksrepo=createInMemoryDrinksRepository();
+        Repository<Order> orderRepo = new InMemoryRepository();
 
-        ConfectioneryService confectioneryService = new ConfectioneryService(cakesrepo,drinksrepo);
+        ConfectioneryService confectioneryService = new ConfectioneryService(cakesrepo,drinksrepo,orderRepo);
         ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);
 
         ConsoleApp consoleApp = new ConsoleApp(confectioneryController);
