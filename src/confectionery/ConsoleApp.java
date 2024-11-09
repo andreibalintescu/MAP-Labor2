@@ -19,7 +19,7 @@ public class ConsoleApp {
         this.scanner = new Scanner(System.in);
     }
 
-    
+
     public void start() {
         boolean running = true;
 
@@ -35,11 +35,11 @@ public class ConsoleApp {
             String option = scanner.nextLine();
             switch (option) {
                 case "1":
-                    if(confectioneryController.loginAdmin(scanner))
+                    if (confectioneryController.loginAdmin(scanner))
                         adminMenu();
                     break;
                 case "2":
-                    if(confectioneryController.loginClient(scanner))
+                    if (confectioneryController.loginClient(scanner))
                         clientMenu();
                     break;
                 case "0":
@@ -50,6 +50,7 @@ public class ConsoleApp {
         }
 
     }
+
     private void clientMenu() {
         boolean clientRunning = true;
         while (clientRunning) {
@@ -89,7 +90,7 @@ public class ConsoleApp {
 
             String option = scanner.nextLine();
             switch (option) {
-                case "1" -> confectioneryController.gettBalance();
+                case "1" -> confectioneryController.getBalanceTotal();
                 case "2" -> confectioneryController.getProfile();
                 case "3" -> confectioneryController.viewUsers();
                 case "0" -> adminRunning = false;
@@ -99,15 +100,13 @@ public class ConsoleApp {
     }
 
 
-
-   
     public static void main(String[] args) {
         Repository<Cake> cakesrepo = createInMemoryCakesRepository();
-        Repository<Drink> drinksrepo=createInMemoryDrinksRepository();
+        Repository<Drink> drinksrepo = createInMemoryDrinksRepository();
         Repository<Order> orderRepo = new InMemoryRepository();
         Repository<User> userRepo = createInMemoryUsersRepository();
 
-        ConfectioneryService confectioneryService = new ConfectioneryService(cakesrepo,drinksrepo,orderRepo,userRepo);
+        ConfectioneryService confectioneryService = new ConfectioneryService(cakesrepo, drinksrepo, orderRepo, userRepo);
         ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);
 
         ConsoleApp consoleApp = new ConsoleApp(confectioneryController);
@@ -116,19 +115,18 @@ public class ConsoleApp {
     }
 
 
-
     private static Repository<Cake> createInMemoryCakesRepository() {
         Repository<Cake> cakeRepository = new InMemoryRepository<>();
 
-        ExpirationDate expirationDate1=new ExpirationDate(2026,Month.February,Day.Eleventh);
-        ExpirationDate expirationDate3=new ExpirationDate(2024,Month.December,Day.Eighteenth);
-        ExpirationDate expirationDate4=new ExpirationDate(2024,Month.December,Day.First);
-        ExpirationDate expirationDate2=new ExpirationDate(2024,Month.November,Day.Thirteenth);
-        ExpirationDate expirationDate5=new ExpirationDate(2024,Month.December,Day.Fourteenth);
+        ExpirationDate expirationDate1 = new ExpirationDate(2026, Month.February, Day.Eleventh);
+        ExpirationDate expirationDate3 = new ExpirationDate(2024, Month.December, Day.Eighteenth);
+        ExpirationDate expirationDate4 = new ExpirationDate(2024, Month.December, Day.First);
+        ExpirationDate expirationDate2 = new ExpirationDate(2024, Month.November, Day.Thirteenth);
+        ExpirationDate expirationDate5 = new ExpirationDate(2024, Month.December, Day.Fourteenth);
 
-        cakeRepository.create(new Cake(1,"Tiramisu",100,50,expirationDate3,1000));
-        cakeRepository.create(new Cake(2,"Ecler",130,50,expirationDate4,1000));
-        cakeRepository.create(new Cake(3,"Dubai Chocolate",200,100,expirationDate2,1200));
+        cakeRepository.create(new Cake(1, "Tiramisu", 100, 50, expirationDate3, 1000));
+        cakeRepository.create(new Cake(2, "Ecler", 130, 50, expirationDate4, 1000));
+        cakeRepository.create(new Cake(3, "Dubai Chocolate", 200, 100, expirationDate2, 1200));
         cakeRepository.create(new Cake(4, "Carrot Cake", 110, 55, expirationDate3, 900));
         cakeRepository.create(new Cake(5, "Cheesecake", 200, 100, expirationDate1, 500));
         cakeRepository.create(new Cake(6, "Lemon Cake", 130, 65, expirationDate2, 600));
@@ -140,15 +138,16 @@ public class ConsoleApp {
 
         return cakeRepository;
     }
+
     private static Repository<Drink> createInMemoryDrinksRepository() {
         Repository<Drink> drinksRepository = new InMemoryRepository<>();
-        ExpirationDate expirationDate5 =new ExpirationDate(2025, Month.April, Day.Fifteenth);
+        ExpirationDate expirationDate5 = new ExpirationDate(2025, Month.April, Day.Fifteenth);
         ExpirationDate expirationDate6 = new ExpirationDate(2025, Month.April, Day.Fifteenth);
         ExpirationDate expirationDate7 = new ExpirationDate(2024, Month.May, Day.TwentyFourth);
         ExpirationDate expirationDate8 = new ExpirationDate(2026, Month.July, Day.TwentyFirst);
         ExpirationDate expirationDate9 = new ExpirationDate(2023, Month.March, Day.Thirteenth);
         ExpirationDate expirationDate10 = new ExpirationDate(2027, Month.January, Day.First);
-        drinksRepository.create(new Drink(11,"Water",10,50,expirationDate6,0));
+        drinksRepository.create(new Drink(11, "Water", 10, 50, expirationDate6, 0));
         drinksRepository.create(new Drink(12, "Cappuccino", 15, 200, expirationDate7, 0));
         drinksRepository.create(new Drink(13, "Latte", 14, 250, expirationDate8, 0));
         drinksRepository.create(new Drink(14, "Beer", 19, 200, expirationDate9, 8));

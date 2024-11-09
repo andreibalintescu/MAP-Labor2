@@ -3,7 +3,7 @@ package confectionery;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.Month;
+
 import confectionery.Model.*;
 import confectionery.Repository.Repository;
 
@@ -28,7 +28,6 @@ public class ConfectioneryService {
         return this.loggedInUser;
     }
 
-
     public List<Cake> getCakes() {
         return menu.getAll();
     }
@@ -41,7 +40,7 @@ public class ConfectioneryService {
         return users.getAll();
     }
 
-    public Order placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
+    public boolean placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
         List<Product> products = new ArrayList<>();
 
         for (int cakeId : cakeIds) {
@@ -57,16 +56,14 @@ public class ConfectioneryService {
                 products.add(drink);
             }
         }
+        if(products.isEmpty()) return false;
 
         Order order = new Order(products, orderIdCounter++, LocalDate.now());
-        orderRepository.create(order);
+        orderRepository.create(order); // Add the Order in the Repository
 
+        ((Client)loggedInUser).placeOrder(order); // Add Order internally in the current Client
+        return true;
 
-        if (loggedInUser != null && loggedInUser instanceof Client)
-            ((Client) loggedInUser).placeOrder(order);  // Downcast dinamic
-
-
-        return order;
     }
 
 
@@ -91,15 +88,16 @@ public class ConfectioneryService {
     public float getBalanceT() {
         Balance balance = new Balance();
         balance.addOrders(orderRepository.getAll());
-        for(Order order : orderRepository.getAll()) {
-            System.out.println(order.getTotal());}
+        for (Order order : orderRepository.getAll()) {
+            System.out.println(order.getTotal());
+        }
         return balance.calculateTotalBalance();
     }
 
 
     public boolean authenticateAdmin(String email, String password) {
         Admin administrator = (Admin) users.getAll().stream()
-                .filter(user -> user instanceof Admin && (( (Admin) user).getEmail().equals(email) && ( (Admin) user).getPassword().equals(password)))
+                .filter(user -> user instanceof Admin && (((Admin) user).getEmail().equals(email) && ((Admin) user).getPassword().equals(password)))
                 .findFirst().orElse(null);
         if (administrator != null) {
             loggedInUser = administrator;
@@ -108,7 +106,7 @@ public class ConfectioneryService {
         return false;
     }
 
-    public boolean authenticateClient(String username){
+    public boolean authenticateClient(String username) {
         Client client = (Client) users.getAll().stream()
                 .filter(user -> user instanceof Client && ((Client) user).getUsername().equals(username))
                 .findFirst().orElse(null);
@@ -117,5 +115,9 @@ public class ConfectioneryService {
             return true;
         }
         return false;
+    }
+
+    void getInvoice(){
+        ((Client) loggedInUser).getInvoice();
     }
 }

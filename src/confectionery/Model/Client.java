@@ -1,13 +1,12 @@
 package confectionery.Model;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Client extends User {
     private final Integer ClientID;
-    private List<Order> orders = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
     public Client(String name, String address, Integer Id) {
         super(name, address);
         this.ClientID = Id;
@@ -38,13 +37,15 @@ public class Client extends User {
             System.out.println("You have no orders yet.");
             return;
         }
-        System.out.println("Your ordered products:");
         for (Order order : this.orders) {
+            System.out.println("Order Id:" + order.getID());
             for (Product product : order.getProducts()) {
                 System.out.println(product.getName() + "................................." + product.getPrice() + "lei");
             }
-            System.out.println("Your total is: " + order.getTotal());
+            System.out.println("Your total for this order is: " + order.getTotal() + "lei" + "\n");
         }
+        if(orders.size() > 1)
+            System.out.println("Your grand total is:" + this.grandTotal() + "lei");
     }
 
     public String toString(){
@@ -53,5 +54,13 @@ public class Client extends User {
 
     public Object getUsername() {
         return this.name;
+    }
+
+    public float grandTotal() {
+        float total = 0;
+        for (Order order : this.orders) {
+            total += order.getTotal();
+        }
+        return total;
     }
 }

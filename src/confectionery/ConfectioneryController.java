@@ -1,20 +1,21 @@
 package confectionery;
 
 import confectionery.Model.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class ConfectioneryController {
 
-    private final ConfectioneryService confectioneryService ;
+    private final ConfectioneryService confectioneryService;
 
     public ConfectioneryController(ConfectioneryService confectioneryService) {
         this.confectioneryService = confectioneryService;
     }
 
 
-     void viewMenu() {
+    void viewMenu() {
         StringBuilder output = new StringBuilder("Cakes and Drinks :\n");
         confectioneryService.getCakes().forEach(product -> output.append(product.toString()).append("\n"));
         confectioneryService.getDrinks().forEach(product -> output.append(product.toString()).append("\n"));
@@ -36,16 +37,11 @@ public class ConfectioneryController {
         String drinkIdsInput = scanner.nextLine();
         List<Integer> drinkIds = parseIds(drinkIdsInput);
 
+        if(confectioneryService.placeOrder(cakeIds, drinkIds))
+            System.out.println("Your order has been placed!");
+            else
+            System.out.println("Failed to place order!.");
 
-        Order order = confectioneryService.placeOrder(cakeIds, drinkIds);
-
-        Client loggedInClient = (Client) confectioneryService.getLoggedInUser(); // Obținem clientul logat
-        if (loggedInClient != null) {
-            loggedInClient.placeOrder(order);
-            System.out.println("Your order has been placed. Order ID: " + order.getID());
-        } else {
-            System.out.println("No client logged in.");
-        }
     }
 
 
@@ -54,24 +50,24 @@ public class ConfectioneryController {
         String email = scanner.nextLine();
         System.out.print("Enter password:");
         String password = scanner.nextLine();
-        if(confectioneryService.authenticateAdmin(email, password)) {
+        if (confectioneryService.authenticateAdmin(email, password)) {
             System.out.println("You have logged in as administrator!");
             return true;
         }
         System.out.println("Failed to log in!");
         return false;
     }
+
     public boolean loginClient(Scanner scanner) {
         System.out.print("Enter username:");
         String username = scanner.nextLine();
-        if(confectioneryService.authenticateClient(username)) {
+        if (confectioneryService.authenticateClient(username)) {
             System.out.println("You have logged in as a client!");
             return true;
         }
         System.out.println("Failed to log in!");
         return false;
     }
-
 
 
     //Misc.
@@ -93,8 +89,8 @@ public class ConfectioneryController {
     }
 
     public void generateInvoice() {
-        Client loggedInClient = (Client) confectioneryService.getLoggedInUser(); // Obținem clientul logat
-        loggedInClient.getInvoice();
+        System.out.println("Generating invoice...\n");
+        confectioneryService.getInvoice();
     }
 
     public void getProfile() {
