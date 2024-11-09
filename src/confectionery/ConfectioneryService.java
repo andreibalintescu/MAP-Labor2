@@ -1,6 +1,7 @@
 package confectionery;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,23 +43,25 @@ public class ConfectioneryService {
 
     public boolean placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
         List<Product> products = new ArrayList<>();
+        Order order = new Order(products, orderIdCounter++, LocalDate.now());
 
         for (int cakeId : cakeIds) {
             Cake cake = findCakeById(cakeId);
             if (cake != null) {
-                products.add(cake);
+                order.addProduct(cake);
             }
         }
 
         for (int drinkId : drinkIds) {
             Drink drink = findDrinkById(drinkId);
             if (drink != null) {
-                products.add(drink);
+                order.addProduct(drink);
             }
         }
-        if(products.isEmpty()) return false;
 
-        Order order = new Order(products, orderIdCounter++, LocalDate.now());
+        if(order.getProducts().isEmpty()) return false;
+
+
         orderRepository.create(order); // Add the Order in the Repository
 
         ((Client)loggedInUser).placeOrder(order); // Add Order internally in the current Client
@@ -89,7 +92,7 @@ public class ConfectioneryService {
         Balance balance = new Balance();
         balance.addOrders(orderRepository.getAll());
         for (Order order : orderRepository.getAll()) {
-            System.out.println(order.getTotal());
+            System.out.println("Order" + order.getID() + ": " + order.getTotal());
         }
         return balance.calculateTotalBalance();
     }
@@ -117,7 +120,23 @@ public class ConfectioneryService {
         return false;
     }
 
-    void getInvoice(){
+    public void getInvoice(){
         ((Client) loggedInUser).getInvoice();
+    }
+
+    public void getMonthlyBalance(int month){
+        double monthlyBalance = orderRepository.getAll().stream()
+                .filter(order -> order.getDate().getMonth() == Month.of(month))
+                .mapToDouble(Order::getTotal)
+                .sum();
+        System.out.println("Monthly balance for month " + month + "of the current year: " + monthlyBalance + " lei");
+    }
+
+    public void getYearlyBalance(int year){
+        double yearlyBalance = orderRepository.getAll().stream()
+                .filter(order -> order.getDate().getYear() == year)
+                .mapToDouble(Order::getTotal)
+                .sum();
+        System.out.println("Yearly balance for year " + year + ": " + yearlyBalance + " lei");
     }
 }

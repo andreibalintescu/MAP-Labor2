@@ -34,7 +34,7 @@ public class Client extends User {
 
     public void getInvoice(){
         if (this.orders.isEmpty()) {
-            System.out.println("You have no orders yet.");
+            System.out.println("You have no orders yet. + \n");
             return;
         }
         for (Order order : this.orders) {

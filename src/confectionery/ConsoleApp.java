@@ -81,9 +81,11 @@ public class ConsoleApp {
         while (adminRunning) {
             System.out.print("""
                     Admin Menu:
-                    1. View Monthly Balance
-                    2. View Profile
-                    3. View Users
+                    1. View Total Balance
+                    2. View Monthly Balance
+                    3. View Yearly Balance
+                    4. View Users
+                    5. View Profile
                     0. Logout
                     Please select an option:
                     """);
@@ -91,8 +93,10 @@ public class ConsoleApp {
             String option = scanner.nextLine();
             switch (option) {
                 case "1" -> confectioneryController.getBalanceTotal();
-                case "2" -> confectioneryController.getProfile();
-                case "3" -> confectioneryController.viewUsers();
+                case "2" -> confectioneryController.generateMonthlyBalance(scanner);
+                case "3" -> confectioneryController.generateYearlyBalance(scanner);
+                case "4" -> confectioneryController.viewUsers();
+                case "5" -> confectioneryController.getProfile();
                 case "0" -> adminRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -101,12 +105,12 @@ public class ConsoleApp {
 
 
     public static void main(String[] args) {
-        Repository<Cake> cakesrepo = createInMemoryCakesRepository();
-        Repository<Drink> drinksrepo = createInMemoryDrinksRepository();
-        Repository<Order> orderRepo = new InMemoryRepository();
+        Repository<Cake> cakeRepo = createInMemoryCakesRepository();
+        Repository<Drink> drinkRepo = createInMemoryDrinksRepository();
+        Repository<Order> orderRepo = new InMemoryRepository<>();
         Repository<User> userRepo = createInMemoryUsersRepository();
 
-        ConfectioneryService confectioneryService = new ConfectioneryService(cakesrepo, drinksrepo, orderRepo, userRepo);
+        ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo, drinkRepo, orderRepo, userRepo);
         ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);
 
         ConsoleApp consoleApp = new ConsoleApp(confectioneryController);
@@ -125,7 +129,7 @@ public class ConsoleApp {
         ExpirationDate expirationDate5 = new ExpirationDate(2024, Month.December, Day.Fourteenth);
 
         cakeRepository.create(new Cake(1, "Tiramisu", 100, 50, expirationDate3, 1000));
-        cakeRepository.create(new Cake(2, "Ecler", 130, 50, expirationDate4, 1000));
+        cakeRepository.create(new Cake(2, "Eclair", 130, 50, expirationDate4, 1000));
         cakeRepository.create(new Cake(3, "Dubai Chocolate", 200, 100, expirationDate2, 1200));
         cakeRepository.create(new Cake(4, "Carrot Cake", 110, 55, expirationDate3, 900));
         cakeRepository.create(new Cake(5, "Cheesecake", 200, 100, expirationDate1, 500));
@@ -151,7 +155,7 @@ public class ConsoleApp {
         drinksRepository.create(new Drink(12, "Cappuccino", 15, 200, expirationDate7, 0));
         drinksRepository.create(new Drink(13, "Latte", 14, 250, expirationDate8, 0));
         drinksRepository.create(new Drink(14, "Beer", 19, 200, expirationDate9, 8));
-        drinksRepository.create(new Drink(15, "Teqila", 18, 300, expirationDate10, 6));
+        drinksRepository.create(new Drink(15, "Tequila", 18, 300, expirationDate10, 6));
         drinksRepository.create(new Drink(16, "Mocha", 16, 250, expirationDate6, 5));
         drinksRepository.create(new Drink(17, "Green Tea", 21, 150, expirationDate7, 0));
         drinksRepository.create(new Drink(18, "Black Tea", 20, 150, expirationDate5, 0));

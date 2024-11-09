@@ -1,14 +1,12 @@
 package confectionery.Model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Order implements HasID {
-    private List<Product> products=new ArrayList<>();
-    private float totalPrice;
-    private Integer orderID;
-    private LocalDate date;
+    private final List<Product> products;
+    private final Integer orderID;
+    private final LocalDate date;
 
     public Order(List<Product> products, Integer orderID, LocalDate date) {
         this.products = products;
@@ -17,11 +15,11 @@ public class Order implements HasID {
     }
 
     public float getTotal() {
-        totalPrice = 0;
+        float totalPrice = 0;
         for (Product p : this.products) {
-            this.totalPrice += p.getPrice();
+            totalPrice += p.getPrice();
         }
-        return this.totalPrice;
+        return totalPrice;
     }
 
     public void addProduct(Product p) {

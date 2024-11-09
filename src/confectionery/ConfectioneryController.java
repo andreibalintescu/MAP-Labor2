@@ -37,9 +37,9 @@ public class ConfectioneryController {
         String drinkIdsInput = scanner.nextLine();
         List<Integer> drinkIds = parseIds(drinkIdsInput);
 
-        if(confectioneryService.placeOrder(cakeIds, drinkIds))
+        if (confectioneryService.placeOrder(cakeIds, drinkIds))
             System.out.println("Your order has been placed!");
-            else
+        else
             System.out.println("Failed to place order!.");
 
     }
@@ -54,7 +54,7 @@ public class ConfectioneryController {
             System.out.println("You have logged in as administrator!");
             return true;
         }
-        System.out.println("Failed to log in!");
+        System.out.println("Wrong email or password!");
         return false;
     }
 
@@ -88,6 +88,19 @@ public class ConfectioneryController {
         System.out.println("The total balance  is: " + balance + " lei");
     }
 
+    public void generateMonthlyBalance(Scanner scanner) {
+        System.out.println("Enter the desired month:");
+        int month = Integer.parseInt(scanner.nextLine());
+        confectioneryService.getMonthlyBalance(month);
+
+    }
+
+    public void generateYearlyBalance(Scanner scanner) {
+        System.out.println("Enter the desired year:");
+        int year = Integer.parseInt(scanner.nextLine());
+        confectioneryService.getYearlyBalance(year);
+    }
+
     public void generateInvoice() {
         System.out.println("Generating invoice...\n");
         confectioneryService.getInvoice();
@@ -97,4 +110,6 @@ public class ConfectioneryController {
         System.out.println("Here is information about your profile:");
         System.out.println(confectioneryService.getLoggedInUser().toString());
     }
+
+
 }

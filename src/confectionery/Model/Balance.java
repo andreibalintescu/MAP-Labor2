@@ -1,17 +1,20 @@
 package confectionery.Model;
 
-import confectionery.Model.Order;
-
-import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Balance {
-    private float balance;
-    private List<Order> orders = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
 
     public void addOrders(List<Order> newOrders) {
         orders.addAll(newOrders);
