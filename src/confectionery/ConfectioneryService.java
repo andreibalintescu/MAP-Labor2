@@ -24,11 +24,6 @@ public class ConfectioneryService {
         this.users = users;
     }
 
-    public void setLoggedInUser(User user) {
-        this.loggedInUser = user;
-    }
-
-
     public User getLoggedInUser() {
         return this.loggedInUser;
     }
@@ -67,10 +62,9 @@ public class ConfectioneryService {
         orderRepository.create(order);
 
 
-        if (loggedInUser != null && loggedInUser instanceof Client) {
-            Client loggedInClient = (Client) loggedInUser;
-            loggedInClient.placeOrder(order);
-        }
+        if (loggedInUser != null && loggedInUser instanceof Client)
+            ((Client) loggedInUser).placeOrder(order);  // Downcast dinamic
+
 
         return order;
     }
@@ -103,9 +97,24 @@ public class ConfectioneryService {
 
 
     public boolean authenticateAdmin(String email, String password) {
-        return users.getAll().stream().filter(user -> user instanceof Admin)
-                .map(user -> (Admin) user) // Downcast to access attributes
-                .anyMatch(admin -> admin.getEmail().equals(email) && admin.getPassword().equals(password));
+        Admin administrator = (Admin) users.getAll().stream()
+                .filter(user -> user instanceof Admin && (( (Admin) user).getEmail().equals(email) && ( (Admin) user).getPassword().equals(password)))
+                .findFirst().orElse(null);
+        if (administrator != null) {
+            loggedInUser = administrator;
+            return true;
+        }
+        return false;
+    }
 
+    public boolean authenticateClient(String username){
+        Client client = (Client) users.getAll().stream()
+                .filter(user -> user instanceof Client && ((Client) user).getUsername().equals(username))
+                .findFirst().orElse(null);
+        if (client != null) {
+            loggedInUser = client;
+            return true;
+        }
+        return false;
     }
 }

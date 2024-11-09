@@ -29,7 +29,7 @@ public class ConsoleApp {
                     1. Login as Administrator
                     2. Login as Client
                     0. Exit
-                    Please select an option: 
+                    Please select an option:
                     """);
 
             String option = scanner.nextLine();
@@ -58,8 +58,9 @@ public class ConsoleApp {
                     1. View Menu
                     2. Place Order
                     3. Generate Invoice
+                    4. View Profile
                     0. Logout
-                    Please select an option: 
+                    Please select an option:
                     """);
 
             String option = scanner.nextLine();
@@ -67,6 +68,7 @@ public class ConsoleApp {
                 case "1" -> confectioneryController.viewMenu();
                 case "2" -> confectioneryController.placeOrder(scanner);
                 case "3" -> confectioneryController.generateInvoice();
+                case "4" -> confectioneryController.getProfile();
                 case "0" -> clientRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -79,13 +81,17 @@ public class ConsoleApp {
             System.out.print("""
                     Admin Menu:
                     1. View Monthly Balance
+                    2. View Profile
+                    3. View Users
                     0. Logout
-                    Please select an option: 
+                    Please select an option:
                     """);
 
             String option = scanner.nextLine();
             switch (option) {
                 case "1" -> confectioneryController.gettBalance();
+                case "2" -> confectioneryController.getProfile();
+                case "3" -> confectioneryController.viewUsers();
                 case "0" -> adminRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -124,7 +130,7 @@ public class ConsoleApp {
         cakeRepository.create(new Cake(2,"Ecler",130,50,expirationDate4,1000));
         cakeRepository.create(new Cake(3,"Dubai Chocolate",200,100,expirationDate2,1200));
         cakeRepository.create(new Cake(4, "Carrot Cake", 110, 55, expirationDate3, 900));
-        cakeRepository.create(new Cake(5, "Cheesecake", 200, 100, expirationDate4, 500));
+        cakeRepository.create(new Cake(5, "Cheesecake", 200, 100, expirationDate1, 500));
         cakeRepository.create(new Cake(6, "Lemon Cake", 130, 65, expirationDate2, 600));
         cakeRepository.create(new Cake(7, "Apple Pie", 90, 45, expirationDate5, 950));
         cakeRepository.create(new Cake(8, "Vanilla Cake", 100, 50, expirationDate2, 1000));
@@ -136,7 +142,7 @@ public class ConsoleApp {
     }
     private static Repository<Drink> createInMemoryDrinksRepository() {
         Repository<Drink> drinksRepository = new InMemoryRepository<>();
-        ExpirationDate expirationDate=new ExpirationDate(2025, Month.April, Day.Fifteenth);
+        ExpirationDate expirationDate5 =new ExpirationDate(2025, Month.April, Day.Fifteenth);
         ExpirationDate expirationDate6 = new ExpirationDate(2025, Month.April, Day.Fifteenth);
         ExpirationDate expirationDate7 = new ExpirationDate(2024, Month.May, Day.TwentyFourth);
         ExpirationDate expirationDate8 = new ExpirationDate(2026, Month.July, Day.TwentyFirst);
@@ -149,7 +155,7 @@ public class ConsoleApp {
         drinksRepository.create(new Drink(15, "Teqila", 18, 300, expirationDate10, 6));
         drinksRepository.create(new Drink(16, "Mocha", 16, 250, expirationDate6, 5));
         drinksRepository.create(new Drink(17, "Green Tea", 21, 150, expirationDate7, 0));
-        drinksRepository.create(new Drink(18, "Black Tea", 20, 150, expirationDate8, 0));
+        drinksRepository.create(new Drink(18, "Black Tea", 20, 150, expirationDate5, 0));
         drinksRepository.create(new Drink(19, "Lemonade", 25, 350, expirationDate9, 0));
         drinksRepository.create(new Drink(20, "Hot Chocolate", 20, 200, expirationDate10, 0));
 

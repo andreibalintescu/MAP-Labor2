@@ -23,8 +23,8 @@ public class ConfectioneryController {
     }
 
     public void viewUsers() {
-        StringBuilder output = new StringBuilder("Users :\n");
-        confectioneryService.getUsers().forEach(user -> output.append(user.toString()).append("\n"));
+        StringBuilder output = new StringBuilder("List of clients registered in the system: :\n");
+        confectioneryService.getUsers().stream().filter(user -> user instanceof Client).forEach(user -> output.append(user).append("\n"));
         System.out.println(output);
     }
 
@@ -65,19 +65,15 @@ public class ConfectioneryController {
     public boolean loginClient(Scanner scanner) {
         System.out.print("Enter username:");
         String username = scanner.nextLine();
-
-        Client client = (Client) confectioneryService.getUsers().stream()
-                .filter(user -> user instanceof Client && ((Client) user).getUsername().equals(username))
-                .findFirst().orElse(null);
-
-        if (client != null) {
-            confectioneryService.setLoggedInUser(client);
+        if(confectioneryService.authenticateClient(username)) {
             System.out.println("You have logged in as a client!");
             return true;
         }
         System.out.println("Failed to log in!");
         return false;
     }
+
+
 
     //Misc.
     private List<Integer> parseIds(String input) {
@@ -100,5 +96,10 @@ public class ConfectioneryController {
     public void generateInvoice() {
         Client loggedInClient = (Client) confectioneryService.getLoggedInUser(); // Obținem clientul logat
         loggedInClient.getInvoice();
+    }
+
+    public void getProfile() {
+        System.out.println("Here is information about your profile:");
+        System.out.println(confectioneryService.getLoggedInUser().toString());
     }
 }
