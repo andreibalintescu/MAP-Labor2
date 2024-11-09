@@ -1,7 +1,6 @@
 package confectionery;
 
 import confectionery.Model.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -91,10 +90,10 @@ public class ConfectioneryController {
         return ids;
     }
 
-    public void gettBalance() {
-        float balance = confectioneryService.getBalance();
-        System.out.println("The total balance for this month is: " + balance + "lei");
 
+    public void getBalanceTotal() {
+        float balance = confectioneryService.getBalanceT();
+        System.out.println("The total balance  is: " + balance + " lei");
     }
 
     public void generateInvoice() {

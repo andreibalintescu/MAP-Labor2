@@ -3,7 +3,7 @@ package confectionery;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.time.Month;
 import confectionery.Model.*;
 import confectionery.Repository.Repository;
 
@@ -94,11 +94,12 @@ public class ConfectioneryService {
         return null;
     }
 
-    public float getBalance() {
-        Balance balance= new Balance();
-        System.out.println(balance.calculateTotalBalance());
-
-        return 0;
+    public float getBalanceT() {
+        Balance balance = new Balance();
+        balance.addOrders(orderRepository.getAll());
+        for(Order order : orderRepository.getAll()) {
+            System.out.println(order.getTotal());}
+        return balance.calculateTotalBalance();
     }
 
 

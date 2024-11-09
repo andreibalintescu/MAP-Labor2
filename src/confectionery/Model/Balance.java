@@ -10,12 +10,12 @@ import java.util.List;
 
 public class Balance {
     private float balance;
-    private List<Order> orders=new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
-//    public Balance(List<Order> orders) {
-//        this.orders = orders;
-//        this.balance = calculateTotalBalance();
-//    }
+
+    public void addOrders(List<Order> newOrders) {
+        orders.addAll(newOrders);
+    }
 
     public float calculateTotalBalance() {
         return (float) orders.stream().mapToDouble(Order::getTotal).sum();

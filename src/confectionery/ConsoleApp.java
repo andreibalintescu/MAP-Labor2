@@ -78,14 +78,14 @@ public class ConsoleApp {
         while (adminRunning) {
             System.out.print("""
                     Admin Menu:
-                    1. View Monthly Balance
+                    1. View Total Balance
                     0. Logout
                     Please select an option: 
                     """);
 
             String option = scanner.nextLine();
             switch (option) {
-                case "1" -> confectioneryController.gettBalance();
+                case "1" -> confectioneryController.getBalanceTotal();
                 case "0" -> adminRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
