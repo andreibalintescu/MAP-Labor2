@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Cake extends Product {
     int calories;
-    public Cake(int idProduct, String name, float price, float weight, ExpirationDate expirationDate, int calories) {
-        super(idProduct, name, price, weight, expirationDate);
+    public Cake(int idProduct, String name, float price, float weight, ExpirationDate expirationDate,int points, int calories) {
+        super(idProduct, name, price, weight, expirationDate,points);
         this.calories=calories;
     }
     public void getCalories() {
@@ -23,6 +23,7 @@ public class Cake extends Product {
                 ", price="+getPrice()+
                 ", weight="+getWeight()+
                 ","+getExpirationDate()+
+                ", points="+getPoints()+
                 "calories=" + calories +
                 '}';
     }

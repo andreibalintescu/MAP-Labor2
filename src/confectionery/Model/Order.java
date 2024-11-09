@@ -21,7 +21,13 @@ public class Order implements HasID {
         }
         return totalPrice;
     }
-
+    public int getTotalPoints(){
+        int totalPoints = 0;
+        for (Product p : this.products) {
+            totalPoints += p.getPoints();
+        }
+        return totalPoints;
+    }
     public void addProduct(Product p) {
         this.products.add(p);
     }

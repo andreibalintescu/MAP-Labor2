@@ -25,6 +25,7 @@ public class ConfectioneryController {
     public void viewUsers() {
         StringBuilder output = new StringBuilder("List of clients registered in the system: :\n");
         confectioneryService.getUsers().stream().filter(user -> user instanceof Client).forEach(user -> output.append(user).append("\n"));
+
         System.out.println(output);
     }
 
@@ -111,5 +112,13 @@ public class ConfectioneryController {
         System.out.println(confectioneryService.getLoggedInUser().toString());
     }
 
+    public void viewMostPoints() {
+            User client = confectioneryService.getClientWithMostPoints();
+            System.out.println("The client with the most points is  ");
+            System.out.println(client);
+            Client client1 = (Client) client;
+            System.out.println("Total points: " + client1.grandTotalPoints());
+
+    }
 
 }

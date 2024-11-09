@@ -7,13 +7,14 @@ public class Product implements HasID {
     private float price;
     private float weight;
     ExpirationDate expirationDate;
-
-    public Product(int idProduct, String name, float price, float weight, ExpirationDate expirationDate) {
+    int points;
+    public Product(int idProduct, String name, float price, float weight, ExpirationDate expirationDate,int points) {
         this.idProduct = idProduct;
         this.name = name;
         this.price = price;
         this.weight = weight;
         this.expirationDate = expirationDate;
+        this.points = points;
 
     }
 
@@ -61,6 +62,10 @@ public class Product implements HasID {
        return idProduct;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -69,6 +74,7 @@ public class Product implements HasID {
                 ", price=" + price +
                 ", weight=" + weight +
                 ", expirationDate=" + expirationDate +
+                ", points=" + points +
                 '}';
     }
 }

@@ -40,12 +40,15 @@ public class Client extends User {
         for (Order order : this.orders) {
             System.out.println("Order Id:" + order.getID());
             for (Product product : order.getProducts()) {
-                System.out.println(product.getName() + "................................." + product.getPrice() + "lei");
+                System.out.println(product.getName() + "................................." + product.getPrice() + "lei"+"---------"+product.getPoints()+" points");
             }
-            System.out.println("Your total for this order is: " + order.getTotal() + "lei" + "\n");
+            System.out.print("Your total for this order is: " + order.getTotal() + "lei" + "\n");
+            System.out.println("Your total points for this order " + order.getTotalPoints() + "\n");
         }
-        if(orders.size() > 1)
+        if(orders.size() > 1) {
             System.out.println("Your grand total is:" + this.grandTotal() + "lei");
+            System.out.println("You have "+this.grandTotalPoints() + " points");
+        }
     }
 
     public String toString(){
@@ -60,6 +63,13 @@ public class Client extends User {
         float total = 0;
         for (Order order : this.orders) {
             total += order.getTotal();
+        }
+        return total;
+    }
+    public int grandTotalPoints() {
+        int total = 0;
+        for (Order order : this.orders) {
+            total += order.getTotalPoints();
         }
         return total;
     }

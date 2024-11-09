@@ -139,4 +139,23 @@ public class ConfectioneryService {
                 .sum();
         System.out.println("Yearly balance for year " + year + ": " + yearlyBalance + " lei");
     }
+    public User getClientWithMostPoints() {
+        Client clientWithMostPoints = null;
+        int maxPoints = 0;
+
+        for (User user : users.getAll()) {
+            if (user instanceof Client) {
+                Client client = (Client) user;
+                int clientPoints = client.grandTotalPoints();
+
+
+                if (clientPoints > maxPoints) {
+                    maxPoints = clientPoints;
+                    clientWithMostPoints = client;
+                }
+            }
+        }
+
+        return clientWithMostPoints;
+    }
 }
