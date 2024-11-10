@@ -1,16 +1,12 @@
 package confectionery.Model;
 
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 /**
  * class Cake which inheritances from the main class Product
  * a Client can order different types of cakes
  */
 public class Cake extends Product {
-    int calories;
+    private final int calories;
     public Cake(int idProduct, String name, float price, float weight, ExpirationDate expirationDate,int points, int calories) {
         super(idProduct, name, price, weight, expirationDate,points);
         this.calories=calories;
@@ -19,8 +15,8 @@ public class Cake extends Product {
     /**
      * gets the calories from the Cake
      */
-    public void getCalories() {
-        System.out.println("Calories: "+calories);
+    public int getCalories() {
+        return calories;
     }
 
     /**
@@ -29,15 +25,9 @@ public class Cake extends Product {
      */
     @Override
     public String toString() {
-        return "Cake{" +
-                "id="+getID()+
-                ", name='"+getName()+
-                ", price="+getPrice()+
-                ", weight="+getWeight()+
-                ","+getExpirationDate()+
-                ", points="+getPoints()+
-                "calories=" + calories +
-                '}';
+        return getID() + ". " + getName() + ", " + getWeight() + " gr" + ", " + getCalories() + " calories" + "..............  " + getPrice() + "lei" + '\n' +
+                "Expires on the " + getExpirationDate().getDay() + " of " + getExpirationDate().getMonth() + " " + getExpirationDate().getYear() + '\n' +
+                "Points: " + getPoints();
     }
 
 

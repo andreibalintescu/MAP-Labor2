@@ -7,9 +7,9 @@ package confectionery.Model;
 public class Product implements HasID {
 
     private final int idProduct;
-    private String name;
-    private float price;
-    private float weight;
+    private final String name;
+    private final float price;
+    private final float weight;
     ExpirationDate expirationDate;
     int points;
 
@@ -113,10 +113,9 @@ public class Product implements HasID {
     }
 
     /**
-     * a string method which includes the Product id,name,price,weight,expirationDate,points
-     * @return
+     * @return a string method which includes the Product id,name,price,weight,expirationDate,points
      */
-    @Override
+
     public String toString() {
         return "Product{" +
                 "idProduct=" + idProduct +

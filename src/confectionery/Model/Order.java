@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * Represents an order made by a client, which contains a list of Products objects,the order ID, and the date the order was placed.
  * Provides methods to calculate the total price and total points of the order and to add products to the order.
-
  **/
 
 public class Order implements HasID {
@@ -15,10 +14,9 @@ public class Order implements HasID {
     private final LocalDate date;
 
     /**
-     *
      * @param products A list of products included in the order.
-     * @param orderID The unique identifier for this order
-     * @param date  The date when the order was placed.
+     * @param orderID  The unique identifier for this order
+     * @param date     The date when the order was placed.
      */
     public Order(List<Product> products, Integer orderID, LocalDate date) {
         this.products = products;
@@ -28,6 +26,7 @@ public class Order implements HasID {
 
     /**
      * Calculates the total price of the order by summing the prices of all products in the order
+     *
      * @return The total price of the order.
      */
     public float getTotal() {
@@ -37,11 +36,13 @@ public class Order implements HasID {
         }
         return totalPrice;
     }
+
     /**
      * Calculates the total points for the order by summing the points associated with all products.
+     *
      * @return The total points of the order.
      */
-    public int getTotalPoints(){
+    public int getTotalPoints() {
         int totalPoints = 0;
         for (Product p : this.products) {
             totalPoints += p.getPoints();
@@ -51,6 +52,7 @@ public class Order implements HasID {
 
     /**
      * Adds a new product to the order.
+     *
      * @param p the product which is added to the order
      */
     public void addProduct(Product p) {
@@ -59,6 +61,7 @@ public class Order implements HasID {
 
     /**
      * Returns the date when the order was placed.
+     *
      * @return the date of the Order
      */
     public LocalDate getDate() {
@@ -67,6 +70,7 @@ public class Order implements HasID {
 
     /**
      * Returns the list of products in the order.
+     *
      * @return the products list
      */
 
@@ -76,6 +80,7 @@ public class Order implements HasID {
 
     /**
      * Returns the unique ID of the order.
+     *
      * @return The unique order ID.
      */
     @Override
