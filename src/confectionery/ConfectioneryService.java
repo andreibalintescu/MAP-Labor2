@@ -129,7 +129,7 @@ public class ConfectioneryService {
                 .filter(order -> order.getDate().getMonth() == Month.of(month))
                 .mapToDouble(Order::getTotal)
                 .sum();
-        System.out.println("Monthly balance for month " + month + "of the current year: " + monthlyBalance + " lei");
+        System.out.println("Monthly balance for month " + month + " of the current year: " + monthlyBalance + " lei");
     }
 
     public void getYearlyBalance(int year){
@@ -140,22 +140,34 @@ public class ConfectioneryService {
         System.out.println("Yearly balance for year " + year + ": " + yearlyBalance + " lei");
     }
     public User getClientWithMostPoints() {
-        Client clientWithMostPoints = null;
+        User clientWithMostPoints = null;
         int maxPoints = 0;
 
         for (User user : users.getAll()) {
             if (user instanceof Client) {
-                Client client = (Client) user;
-                int clientPoints = client.grandTotalPoints();
-
+                int clientPoints = ((Client) user).grandTotalPoints();
 
                 if (clientPoints > maxPoints) {
                     maxPoints = clientPoints;
-                    clientWithMostPoints = client;
+                    clientWithMostPoints = user;
                 }
             }
         }
-
         return clientWithMostPoints;
+    }
+
+    public void deleteOrder(int id) {
+        orderRepository.delete(id); // Remove from the repo
+        ((Client) loggedInUser).deleteById(id); // And from the client
+    }
+
+    public void createAdmin(String name, String address, String email, String password, int id) {
+        Admin admin = new Admin(password,email,id,name,address);
+        users.create(admin);
+    }
+
+    public void createClient(String name, String address, int id) {
+        Client client = new Client(name,address,id);
+        users.create(client);
     }
 }

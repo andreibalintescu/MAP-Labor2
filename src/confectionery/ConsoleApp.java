@@ -26,19 +26,21 @@ public class ConsoleApp {
         while (running) {
             System.out.print("""
                     Welcome to the Confectionery App!
-                    1. Login as Administrator
-                    2. Login as Client
+                    1. Create account
+                    2. Login as Administrator
+                    3. Login as Client
                     0. Exit
                     Please select an option:
                     """);
 
             String option = scanner.nextLine();
             switch (option) {
-                case "1":
+                case "1": confectioneryController.createAccount(scanner); break;
+                case "2":
                     if (confectioneryController.loginAdmin(scanner))
                         adminMenu();
                     break;
-                case "2":
+                case "3":
                     if (confectioneryController.loginClient(scanner))
                         clientMenu();
                     break;
@@ -58,8 +60,9 @@ public class ConsoleApp {
                     Client Menu:
                     1. View Menu
                     2. Place Order
-                    3. Generate Invoice
-                    4. View Profile
+                    3. Cancel Order
+                    4. Generate Invoice
+                    5. View Profile
                     0. Logout
                     Please select an option:
                     """);
@@ -68,8 +71,9 @@ public class ConsoleApp {
             switch (option) {
                 case "1" -> confectioneryController.viewMenu();
                 case "2" -> confectioneryController.placeOrder(scanner);
-                case "3" -> confectioneryController.generateInvoice();
-                case "4" -> confectioneryController.getProfile();
+                case "3" -> confectioneryController.cancelOrder(scanner);
+                case "4" -> confectioneryController.generateInvoice();
+                case "5" -> confectioneryController.getProfile();
                 case "0" -> clientRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }

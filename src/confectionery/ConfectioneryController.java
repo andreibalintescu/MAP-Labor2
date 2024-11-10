@@ -121,4 +121,44 @@ public class ConfectioneryController {
 
     }
 
+    public void cancelOrder(Scanner scanner) {
+        System.out.println("Enter the Id of the order you would like to delete from the receipt or 0 to cancel the request:");
+        int id = Integer.parseInt(scanner.nextLine());
+        if(id != 0) {confectioneryService.deleteOrder(id);
+            System.out.println("Order canceled successfully!");}
+        else
+            System.out.println("Request canceled!");
+    }
+
+    public void createAccount(Scanner scanner) {
+        System.out.println("Choose your role: Admin or Client.");
+        String role = scanner.nextLine();
+        if (role.equals("Admin")) {
+            System.out.println("Enter your name:");
+            String name = scanner.nextLine();
+            System.out.println("Enter your address:");
+            String address = scanner.nextLine();
+            System.out.println("Enter your email:");
+            String email = scanner.nextLine();
+            System.out.println("Enter your password:");
+            String password = scanner.nextLine();
+            int id = generateId();
+            confectioneryService.createAdmin(name,address,email, password, id);
+            System.out.println("Admin account created successfully!");
+        }
+        else if (role.equals("Client")) {
+            System.out.println("Enter your name:");
+            String name = scanner.nextLine();
+            System.out.println("Enter your address:");
+            String address = scanner.nextLine();
+            int id = generateId();
+            confectioneryService.createClient(name,address,id);
+            System.out.println("Client account created successfully!");
+        }
+        else System.out.println("Failed to create account!");
+    }
+
+    private int generateId() {
+        return (int) (Math.random() * 1000);
+    }
 }

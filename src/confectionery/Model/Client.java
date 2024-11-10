@@ -34,7 +34,7 @@ public class Client extends User {
 
     public void getInvoice(){
         if (this.orders.isEmpty()) {
-            System.out.println("You have no orders yet. + \n");
+            System.out.println("You have no orders yet." + "\n");
             return;
         }
         for (Order order : this.orders) {
@@ -72,5 +72,14 @@ public class Client extends User {
             total += order.getTotalPoints();
         }
         return total;
+    }
+
+    public void deleteById(int id){
+        for (Order order : this.orders) {
+            if (order.getID() == id) {
+                this.orders.remove(order);
+                break;
+            }
+        }
     }
 }
