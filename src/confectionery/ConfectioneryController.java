@@ -20,6 +20,12 @@ public class ConfectioneryController {
         this.confectioneryService = confectioneryService;
     }
 
+    /**
+     * Prompts the user to create an account as either an Admin or Client.
+     * The method will ask for user details to create the account.
+     * @param scanner The scanner object to capture user input.
+     */
+
     public void createAccount(Scanner scanner) {
         System.out.println("Choose your role: Admin or Client.");
         String role = scanner.nextLine();
@@ -46,6 +52,12 @@ public class ConfectioneryController {
         } else System.out.println("Failed to create account!");
     }
 
+    /**
+     * Authenticates the admin based on email and password.
+     * @param scanner The scanner object to capture user input.
+     * @return true if login is successful, false otherwise.
+     */
+
     public boolean loginAdmin(Scanner scanner) {
         System.out.print("Enter email:");
         String email = scanner.nextLine();
@@ -59,6 +71,11 @@ public class ConfectioneryController {
         return false;
     }
 
+    /**
+     * Authenticates the client based on username
+     * @param scanner The scanner object to capture user input.
+     * @return true if login is successful, false otherwise.
+     */
     public boolean loginClient(Scanner scanner) {
         System.out.print("Enter username:");
         String username = scanner.nextLine();
@@ -70,6 +87,10 @@ public class ConfectioneryController {
         return false;
     }
 
+    /**
+     * Displays the menu of cakes and drinks available for purchase.
+     */
+
     void viewMenu() {
         StringBuilder output = new StringBuilder("Cakes and Drinks :\n");
         confectioneryService.getCakes().forEach(product -> output.append(product.toString()).append("\n"));
@@ -77,12 +98,19 @@ public class ConfectioneryController {
         System.out.println(output);
     }
 
+    /**
+     * Displays a list of all registered clients in the system.
+     */
     public void viewUsers() {
         StringBuilder output = new StringBuilder("List of clients registered in the system: :\n");
         confectioneryService.getUsers().stream().filter(user -> user instanceof Client).forEach(user -> output.append(user).append("\n"));
 
         System.out.println(output);
     }
+
+    /**
+     * Displays the client with the most points and their total points.
+     */
 
     public void viewMostPoints() {
         User client = confectioneryService.getClientWithMostPoints();
@@ -92,6 +120,10 @@ public class ConfectioneryController {
         System.out.println("Total points: " + client1.grandTotalPoints());
 
     }
+    /**
+     * Allows the client to place an order by entering cake and drink IDs.
+     * @param scanner The scanner object to capture user input.
+     */
 
     public void placeOrder(Scanner scanner) {
         System.out.println("Enter the IDs of cakes you want to order separated by space:");
@@ -106,6 +138,10 @@ public class ConfectioneryController {
         else System.out.println("Failed to place order!.");
 
     }
+    /**
+     * Allows the client to cancel a previously placed order.
+     * @param scanner The scanner object to capture user input.
+     */
 
     public void cancelOrder(Scanner scanner) {
         System.out.println("Enter the Id of the order you would like to delete from the receipt or 0 to cancel the request:");
@@ -116,11 +152,19 @@ public class ConfectioneryController {
         } else System.out.println("Request canceled!");
     }
 
+    /**
+     * Displays the total balance of the confectionery.
+     */
 
     public void getBalanceTotal() {
         float balance = confectioneryService.getBalanceTotal();
         System.out.println("The total balance  is: " + balance + " lei");
     }
+
+    /**
+     * Generates and displays the balance for a specific month.
+     * @param scanner The scanner object to capture user input.
+     */
 
     public void generateMonthlyBalance(Scanner scanner) {
         System.out.println("Enter the desired month:");
@@ -128,17 +172,29 @@ public class ConfectioneryController {
         confectioneryService.getMonthlyBalance(month);
 
     }
+    /**
+     * Generates and displays the balance for a specific year.
+     * @param scanner The scanner object to capture user input.
+     */
 
     public void generateYearlyBalance(Scanner scanner) {
         System.out.println("Enter the desired year:");
         int year = Integer.parseInt(scanner.nextLine());
         confectioneryService.getYearlyBalance(year);
     }
+    /**
+     * Generates and prints an invoice for the current period.
+     */
 
     public void generateInvoice() {
         System.out.println("Generating invoice...\n");
         confectioneryService.getInvoice();
     }
+
+
+    /**
+     * Displays the profile information of the user.
+     */
 
     public void getProfile() {
         System.out.println("Here is information about your profile:");
@@ -146,6 +202,11 @@ public class ConfectioneryController {
     }
 
     //Misc.
+    /**
+     * Parses a space-separated string of IDs into a list of integers.
+     * @param input The space-separated string of IDs.
+     * @return A list of integers representing the IDs.
+     */
     private List<Integer> parseIds(String input) {
         List<Integer> ids = new ArrayList<>();
         if (!input.isEmpty()) {
@@ -157,10 +218,19 @@ public class ConfectioneryController {
         return ids;
     }
 
+    /**
+     * Generates a random ID for a user.
+     * @return A randomly generated integer ID.
+     */
+
     private int generateId() {
         return (int) (Math.random() * 1000);
     }
 
+    /**
+     * Allows the user to change their password.
+     * @param scanner The scanner object to capture user input.
+     */
 
     public void changePassword(Scanner scanner) {
         System.out.println("Enter your new password:");
