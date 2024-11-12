@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @param <T> The type of objects stored in the repository, which must implement HasId.
  */
-public class InMemoryRepository<T extends HasID> implements Repository<T> {
+public class InMemoryRepository<T extends HasID> implements IRepository<T> {
     private final Map<Integer, T> data = new HashMap<>();
 
     /**

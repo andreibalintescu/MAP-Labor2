@@ -6,7 +6,7 @@ import confectionery.Model.*;
 
 
 import confectionery.Repository.InMemoryRepository;
-import confectionery.Repository.Repository;
+import confectionery.Repository.IRepository;
 
 /**
  * The class ConsoleApp represents the implementation of the interface layer.
@@ -124,10 +124,10 @@ public class ConsoleApp {
      * Finally, the application console starts with all the components laid in place.
      */
     public static void main(String[] args) {
-        Repository<Cake> cakeRepo = createInMemoryCakesRepository();
-        Repository<Drink> drinkRepo = createInMemoryDrinksRepository();
-        Repository<Order> orderRepo = new InMemoryRepository<>();
-        Repository<User> userRepo = createInMemoryUsersRepository();
+        IRepository<Cake> cakeRepo = createInMemoryCakesRepository();
+        IRepository<Drink> drinkRepo = createInMemoryDrinksRepository();
+        IRepository<Order> orderRepo = new InMemoryRepository<>();
+        IRepository<User> userRepo = createInMemoryUsersRepository();
 
         ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo, drinkRepo, orderRepo, userRepo);
         ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);
@@ -142,8 +142,8 @@ public class ConsoleApp {
      *
      * @return a cake repository.
      */
-    private static Repository<Cake> createInMemoryCakesRepository() {
-        Repository<Cake> cakeRepository = new InMemoryRepository<>();
+    private static IRepository<Cake> createInMemoryCakesRepository() {
+        IRepository<Cake> cakeRepository = new InMemoryRepository<>();
 
         ExpirationDate expirationDate1 = new ExpirationDate(2026, Month.February, Day.Eleventh);
         ExpirationDate expirationDate3 = new ExpirationDate(2024, Month.December, Day.Eighteenth);
@@ -171,8 +171,8 @@ public class ConsoleApp {
      *
      * @return a drink repository.
      */
-    private static Repository<Drink> createInMemoryDrinksRepository() {
-        Repository<Drink> drinksRepository = new InMemoryRepository<>();
+    private static IRepository<Drink> createInMemoryDrinksRepository() {
+        IRepository<Drink> drinksRepository = new InMemoryRepository<>();
         ExpirationDate expirationDate5 = new ExpirationDate(2025, Month.April, Day.Fifteenth);
         ExpirationDate expirationDate6 = new ExpirationDate(2025, Month.April, Day.Fifteenth);
         ExpirationDate expirationDate7 = new ExpirationDate(2024, Month.May, Day.TwentyFourth);
@@ -198,8 +198,8 @@ public class ConsoleApp {
      *
      * @return a user repository.
      */
-    private static Repository<User> createInMemoryUsersRepository() {
-        Repository<User> usersRepository = new InMemoryRepository<>();
+    private static IRepository<User> createInMemoryUsersRepository() {
+        IRepository<User> usersRepository = new InMemoryRepository<>();
         usersRepository.create(new Client("Andrei", "Bujoreni", 123));
         usersRepository.create(new Client("Maria", "Bujoreni", 312));
         usersRepository.create(new Client("Ioana", "Bujoreni", 231));

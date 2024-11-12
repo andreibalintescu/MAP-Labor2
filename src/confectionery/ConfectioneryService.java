@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import confectionery.Model.*;
-import confectionery.Repository.Repository;
+import confectionery.Repository.IRepository;
 
 /**
  * The service layer computes the information received from the controller and applies business logic to the operations
@@ -16,10 +16,10 @@ import confectionery.Repository.Repository;
  */
 public class ConfectioneryService {
 
-    private final Repository<Cake> menu;
-    private final Repository<Drink> drink;
-    private final Repository<Order> orderRepository;
-    private final Repository<User> users;
+    private final IRepository<Cake> menu;
+    private final IRepository<Drink> drink;
+    private final IRepository<Order> orderRepository;
+    private final IRepository<User> users;
     private int orderIdCounter = 1;
     private User loggedInUser;
 
@@ -30,7 +30,7 @@ public class ConfectioneryService {
      * @param orderRepository The repository of the stored orders
      * @param users The repository of all users
      */
-    public ConfectioneryService(Repository<Cake> menu, Repository<Drink> drink, Repository<Order> orderRepository, Repository<User> users) {
+    public ConfectioneryService(IRepository<Cake> menu, IRepository<Drink> drink, IRepository<Order> orderRepository, IRepository<User> users) {
         this.menu = menu;
         this.drink = drink;
         this.orderRepository = orderRepository;

@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @param <T> The type of objects stored in the repository, which must implement HasId.
  */
-public interface Repository<T extends HasID> {
+public interface IRepository<T extends HasID> {
     /**
      * Creates a new object in the repository.
      *
