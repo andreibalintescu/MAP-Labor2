@@ -3,6 +3,7 @@ package confectionery;
 import confectionery.Model.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -88,16 +89,64 @@ public class ConfectioneryController {
     }
 
     /**
-     * Displays the menu of cakes and drinks available for purchase.
+     * Displays the menu of cakes and drinks available for purchase order by price
      */
 
-    void viewMenu() {
-        StringBuilder output = new StringBuilder("Cakes and Drinks :\n");
-        confectioneryService.getCakes().forEach(product -> output.append(product.toString()).append("\n"));
-        confectioneryService.getDrinks().forEach(product -> output.append(product.toString()).append("\n"));
+
+     void viewMenuPrice(){
+         StringBuilder output = new StringBuilder("Cakes :\n");
+         List<Cake> sortedCakes=new ArrayList<>(confectioneryService.getCakes());
+         sortedCakes.sort(Comparator.comparing(Cake::getPrice));
+
+         List<Drink> sortedDrinks=new ArrayList<>(confectioneryService.getDrinks());
+         sortedDrinks.sort(Comparator.comparing(Drink::getPrice));
+         sortedCakes.forEach(cake -> output.append(cake.toString()).append("\n"));
+         output.append(" Drinks : \n");
+         sortedDrinks.forEach(drink -> output.append(drink.toString()).append("\n"));
+         System.out.println(output);
+     }
+
+    /**
+     * Displays the menu of cakes and drinks available for purchase order by price
+     */
+
+    void viewMenuPoints(){
+        StringBuilder output = new StringBuilder("Cakes :\n");
+        List<Cake> sortedCakes=new ArrayList<>(confectioneryService.getCakes());
+        sortedCakes.sort(Comparator.comparing(Cake::getPoints));
+
+        List<Drink> sortedDrinks=new ArrayList<>(confectioneryService.getDrinks());
+        sortedDrinks.sort(Comparator.comparing(Drink::getPoints));
+        sortedCakes.forEach(cake -> output.append(cake.toString()).append("\n"));
+        output.append("Drinks :\n");
+        sortedDrinks.forEach(drink -> output.append(drink.toString()).append("\n"));
         System.out.println(output);
     }
 
+    /**
+     * filter the Drinks which have Alcohol
+     */
+    void filterByAlcohol(){
+        StringBuilder output = new StringBuilder("Drinks :\n");
+        List<Drink> filterDrinks=new ArrayList<>(confectioneryService.getDrinks());
+        filterDrinks.stream().filter(drink -> drink.getAlcoholPercentage() > 0).forEach(drink -> output.append(drink.toString()).append("\n"));
+        System.out.println(output);
+
+    }
+
+    /**
+     * filter the Product available until December 2024
+     */
+    void filterByExpirationDate(){
+        StringBuilder output = new StringBuilder("Cakes :\n");
+        List<Cake> filterCakes=new ArrayList<>(confectioneryService.getCakes());
+        filterCakes.stream().filter(cake->cake.getExpirationDate().getYear() <=2024).forEach(filterCake -> output.append(filterCake.toString()).append("\n"));
+
+        output.append("Drinks :\n");
+        List<Drink> filterDrinks=new ArrayList<>(confectioneryService.getDrinks());
+        filterDrinks.stream().filter(drink -> drink.getExpirationDate().getYear() == 2024 && (drink.getExpirationDate().getMonth()==Month.November || drink.getExpirationDate().getMonth()==Month.December )).forEach(drink -> output.append(drink.toString()).append("\n"));
+        System.out.println(output);
+    }
     /**
      * Displays a list of all registered clients in the system.
      */

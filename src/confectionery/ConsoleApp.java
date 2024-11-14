@@ -63,23 +63,29 @@ public class ConsoleApp {
         while (clientRunning) {
             System.out.print("""
                     Client Menu:
-                    1. View Menu
+                    0. View Menu order by Points
+                    1. View Menu order by Price
                     2. Place Order
                     3. Cancel Order
                     4. Generate Invoice
                     5. View Profile
-                    0. Logout
+                    6. View Drinks With Alcohol
+                    7. View Products available until December 2024
+                    00. Logout
                     Please select an option:
                     """);
 
             String option = scanner.nextLine();
             switch (option) {
-                case "1" -> confectioneryController.viewMenu();
+                case "0" ->confectioneryController.viewMenuPoints();
+                case "1" -> confectioneryController.viewMenuPrice();
                 case "2" -> confectioneryController.placeOrder(scanner);
                 case "3" -> confectioneryController.cancelOrder(scanner);
                 case "4" -> confectioneryController.generateInvoice();
                 case "5" -> confectioneryController.getProfile();
-                case "0" -> clientRunning = false;
+                case "6" ->confectioneryController.filterByAlcohol();
+                case "7" ->confectioneryController.filterByExpirationDate();
+                case "00" -> clientRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
