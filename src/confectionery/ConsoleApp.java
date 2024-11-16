@@ -99,7 +99,7 @@ public class ConsoleApp {
                     1. View Total Balance
                     2. View Monthly Balance
                     3. View Yearly Balance
-                    4. View Users
+                    4. View Users with their Orders
                     5. View Profile
                     6. View Client with the most Points
                     7. Change Password

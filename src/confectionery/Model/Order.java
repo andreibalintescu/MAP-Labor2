@@ -88,5 +88,21 @@ public class Order implements HasID {
         return this.orderID;
     }
 
+    /**
+     * method to string ,which returns details of the order
+     * @return details of the order
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Order ID: ").append(this.orderID).append("\n");
+        stringBuilder.append("Date: ").append(this.date).append("\n");
+        stringBuilder.append("Products: \n");
+        for (Product product : this.products) {
+            stringBuilder.append(product.toString()).append("\n");
+        }
+        stringBuilder.append("Total: ").append(getTotal()).append("\n");
 
+        return stringBuilder.toString();
+    }
 }

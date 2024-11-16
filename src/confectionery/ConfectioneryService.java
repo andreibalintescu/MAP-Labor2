@@ -172,6 +172,8 @@ public class ConfectioneryService {
         }
         return balance.calculateTotalBalance();
     }
+
+
     /**
      * prints the month with the total amount
      *  @param month The month for which the balance should be calculated.

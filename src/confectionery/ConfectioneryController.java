@@ -148,14 +148,31 @@ public class ConfectioneryController {
         System.out.println(output);
     }
     /**
-     * Displays a list of all registered clients in the system.
+     * Displays a list of all registered clients in the system with their orders
      */
-    public void viewUsers() {
-        StringBuilder output = new StringBuilder("List of clients registered in the system: :\n");
-        confectioneryService.getUsers().stream().filter(user -> user instanceof Client).forEach(user -> output.append(user).append("\n"));
 
+    public void viewUsers() {
+        StringBuilder output = new StringBuilder("List of clients registered in the system: \n");
+        for (User user : confectioneryService.getUsers()) {
+            if (user instanceof Client) {
+                Client client = (Client) user;
+                output.append(client).append("\n");
+
+                List<Order> clientOrders = client.getOrders();
+                if (clientOrders.isEmpty()) {
+                    output.append("No orders placed yet.\n");
+                } else {
+                    output.append("Orders placed by this client:\n");
+                    for (Order order : clientOrders) {
+                        output.append(order.toString()).append("\n");
+                    }
+                }
+                output.append("\n");
+            }
+        }
         System.out.println(output);
     }
+
 
     /**
      * Displays the client with the most points and their total points.
