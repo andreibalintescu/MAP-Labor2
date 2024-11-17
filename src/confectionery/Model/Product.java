@@ -126,4 +126,13 @@ public class Product implements HasID {
                 ", points=" + points +
                 '}';
     }
+
+    /**
+     * set points
+     * @param points
+     */
+    public void setPoints(int points) {
+        this.points=points;
+    }
 }
+
