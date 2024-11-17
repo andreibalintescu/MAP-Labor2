@@ -220,6 +220,17 @@ public class ConfectioneryController {
     }
 
     /**
+     *  Allows the admin to change the points from the product
+     * @param scanner
+     */
+    public void updateProduct(Scanner scanner) {
+        System.out.println("Enter the Id of the product you would like to update");
+        int id = Integer.parseInt(scanner.nextLine());
+        confectioneryService.productUpdate(id);
+
+    }
+
+    /**
      * Displays the total balance of the confectionery.
      */
 

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import confectionery.Model.*;
 import confectionery.Repository.IRepository;
@@ -160,6 +161,43 @@ public class ConfectioneryService {
         orderRepository.delete(id); // Remove from the repo
         ((Client) loggedInUser).deleteById(id); // And from the client
     }
+
+    /**
+     * change the ponts from a product
+     * @param id the id from the product
+     */
+    public void productUpdate(int id){
+        Cake cake=menu.get(id);
+        Drink drink1=drink.get(id);
+        if (cake != null ) {
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Current product points: " + cake.getPoints());
+            System.out.print("Enter new points (leave empty to keep current points): ");
+            String newPoints = scanner.nextLine();
+            if (!newPoints.isEmpty()) {
+                int newPoint = Integer.parseInt(newPoints);
+                cake.setPoints(newPoint);
+            }
+            menu.update(cake);
+            System.out.println("Product updated successfully!");
+        } else if(drink1 != null) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Current product points: " + drink1.getPoints());
+            System.out.print("Enter new points (leave empty to keep current points): ");
+            String newPoints = scanner.nextLine();
+            if (!newPoints.isEmpty()) {
+                int newPoint = Integer.parseInt(newPoints);
+                drink1.setPoints(newPoint);
+            }
+            drink.update(drink1);
+            System.out.println("Product updated successfully!");
+        }
+        else
+            System.out.println("Product with ID " + id + " not found.");
+        }
+
+
     /**
      * Generates an invoice for the logged-in client based on their orders.
      */
