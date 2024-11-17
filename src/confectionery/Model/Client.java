@@ -11,7 +11,7 @@ import java.util.List;
 public class Client extends User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final Integer ClientID;
+    private Integer ClientID;
     private final List<Order> orders = new ArrayList<>();
 
     /**
@@ -24,6 +24,9 @@ public class Client extends User implements Serializable {
         this.ClientID = Id;
     }
 
+    public Client(){
+
+    }
     /**
      * @return the client id
      **/

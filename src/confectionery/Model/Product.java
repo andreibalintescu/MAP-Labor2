@@ -1,121 +1,134 @@
 package confectionery.Model;
 
+import java.io.*;
+
 /**
- * class Product which implements the HasId interface
+ * Class Product which implements the HasId interface.
  */
+public class Product implements HasID, Serializable {
+    private static final long serialVersionUID = 1L;
 
-public class Product implements HasID{
-
-    private final int idProduct;
-    private final String name;
-    private final float price;
-    private final float weight;
-    ExpirationDate expirationDate;
-    int points;
+    private int idProduct;
+    private String name;
+    private float price;
+    private float weight;
+    private ExpirationDate expirationDate; // Ensure ExpirationDate is Serializable
+    private int points;
 
     /**
-     * @param idProduct the product id
-     * @param name the product name
-     * @param price the product price
-     * @param weight the product weight
+     * @param idProduct      the product id
+     * @param name           the product name
+     * @param price          the product price
+     * @param weight         the product weight
      * @param expirationDate the product expiration date
-     * @param points the product points
+     * @param points         the product points
      */
-    public Product(int idProduct, String name, float price, float weight, ExpirationDate expirationDate,int points) {
+    public Product(int idProduct, String name, float price, float weight, ExpirationDate expirationDate, int points) {
         this.idProduct = idProduct;
         this.name = name;
         this.price = price;
         this.weight = weight;
         this.expirationDate = expirationDate;
         this.points = points;
+    }
 
+    public Product() {
+        // Default constructor for deserialization
     }
 
     /**
-     * prints the expiration date from the product
+     * Prints the expiration date from the product.
      */
     public void viewExpirationDate() {
-        System.out.print("Expiration Date :");
+        System.out.print("Expiration Date: ");
         System.out.print(expirationDate.getDay() + ".");
         System.out.print(expirationDate.getMonth() + ".");
         System.out.println(expirationDate.getYear() + ".");
     }
 
     /**
-     * prints the price of the product
+     * Prints the price of the product.
      */
     public void printPrice() {
         System.out.println("Price: " + price);
     }
+
     /**
-     * prints the weight of the product
+     * Prints the weight of the product.
      */
     public void printWeight() {
         System.out.println("Weight: " + weight);
     }
 
     /**
-     * prints the name of the product
+     * Prints the name of the product.
      */
     public void printName() {
         System.out.println("Name: " + name);
     }
 
     /**
-     * @return the product id
+     * @return the product id.
      */
     public int getIdProduct() {
         return idProduct;
     }
 
     /**
-     * @return the mane
+     * @return the name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return the price
+     * @return the price.
      */
     public float getPrice() {
         return price;
     }
 
     /**
-     * @return the weight
+     * @return the weight.
      */
     public float getWeight() {
         return weight;
     }
 
     /**
-     * @return the expiration date
+     * @return the expiration date.
      */
     public ExpirationDate getExpirationDate() {
         return expirationDate;
     }
 
     /**
-     * @return the product id
+     * @return the product id.
      */
     @Override
     public Integer getID() {
-       return idProduct;
+        return idProduct;
     }
 
-
     /**
-     * @return the points from the product
+     * @return the points from the product.
      */
     public int getPoints() {
         return points;
     }
 
     /**
-     * @return a string method which includes the Product id,name,price,weight,expirationDate,points
+     * Sets points.
+     *
+     * @param points the points to set.
      */
+    public void setPoints(int points) {
+        this.points = points;
+    }
 
+    /**
+     * @return a string that includes the Product id, name, price, weight, expirationDate, and points.
+     */
     public String toString() {
         return "Product{" +
                 "idProduct=" + idProduct +
@@ -128,11 +141,22 @@ public class Product implements HasID{
     }
 
     /**
-     * set points
-     * @param points
+     * Custom serialization method.
      */
-    public void setPoints(int points) {
-        this.points=points;
+    @Serial
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.defaultWriteObject(); // Serialize non-transient fields
+        oos.writeObject(name);
+        oos.writeObject(expirationDate);
+    }
+
+    /**
+     * Custom deserialization method.
+     */
+    @Serial
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject(); // Deserialize non-transient fields
+        name = (String) ois.readObject();
+        expirationDate = (ExpirationDate) ois.readObject();
     }
 }
-

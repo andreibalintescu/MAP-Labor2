@@ -11,10 +11,13 @@ import java.io.Serializable;
 public class Cake extends Product implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final int calories;
+    private int calories;
     public Cake(int idProduct, String name, float price, float weight, ExpirationDate expirationDate,int points, int calories) {
         super(idProduct, name, price, weight, expirationDate,points);
         this.calories=calories;
+    }
+
+    public Cake() {
     }
 
     /**

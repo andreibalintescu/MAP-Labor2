@@ -111,7 +111,7 @@ public class ConfectioneryService {
         return false;
     }
     /**
-     * Authenticates an client based on the username
+     * Authenticates a client based on the username
      * @param username The username of the client
      * @return true if authentication is successful, false otherwise.
      */

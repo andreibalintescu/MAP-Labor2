@@ -10,10 +10,14 @@ import java.io.Serializable;
 public class Drink extends Product implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final float alcoholPercentage;
+    private float alcoholPercentage;
     public Drink(int idProduct, String name, float price, float weight, ExpirationDate expirationDate,int points, float alcohol) {
         super(idProduct, name, price, weight, expirationDate,points);
         this.alcoholPercentage = alcohol;
+    }
+
+    public Drink() {
+
     }
 
     /**

@@ -13,8 +13,8 @@ public class Admin extends User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String password;
-    private final String email;
-    private final Integer id;
+    private String email;
+    private Integer id;
 
     /**
      * @param password for the admin
@@ -28,6 +28,10 @@ public class Admin extends User implements Serializable {
         this.password = password;
         this.email = email;
         this.id = id;
+
+    }
+
+    public Admin(){
 
     }
 
