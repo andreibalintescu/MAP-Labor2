@@ -1,12 +1,14 @@
 package confectionery.Model;
 
+import java.io.Serializable;
+
 /**
  * Represents an expiration date, which includes a year, month, and day.
  */
-public class ExpirationDate {
-    private int year;
-    private Month month;
-    private Day day;
+public class ExpirationDate implements Serializable {
+    private final int year;
+    private final Month month;
+    private final Day day;
 
     /**
      *

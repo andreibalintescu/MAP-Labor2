@@ -73,9 +73,15 @@ public class ConfectioneryService {
      * @param password The password for the admin account.
      * @param id The unique ID of the admin.
      */
-    public void createAdmin(String name, String address, String email, String password, int id) {
+    public boolean createAdmin(String name, String address, String email, String password, int id) {
         Admin admin = new Admin(password, email, id, name, address);
-        users.create(admin);
+        if(users.getAll().stream().anyMatch(user -> user instanceof Admin && ((Admin) user).getEmail().equals(email)))
+            return false;
+        else {
+            users.create(admin);
+            return true;
+        }
+
     }
 
     /**

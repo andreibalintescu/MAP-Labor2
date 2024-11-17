@@ -40,8 +40,10 @@ public class ConfectioneryController {
             System.out.println("Enter your password:");
             String password = scanner.nextLine();
             int id = generateId();
-            confectioneryService.createAdmin(name, address, email, password, id);
-            System.out.println("Admin account created successfully!");
+            if(confectioneryService.createAdmin(name, address, email, password, id))
+                System.out.println("Admin account created successfully!");
+            else
+                System.out.println("That email is already in use!");
         } else if (role.equals("Client")) {
             System.out.println("Enter your name:");
             String name = scanner.nextLine();
@@ -50,7 +52,7 @@ public class ConfectioneryController {
             int id = generateId();
             confectioneryService.createClient(name, address, id);
             System.out.println("Client account created successfully!");
-        } else System.out.println("Failed to create account!");
+        } else System.out.println("Choose one of the provided roles!");
     }
 
     /**
@@ -129,7 +131,7 @@ public class ConfectioneryController {
     void filterByAlcohol(){
         StringBuilder output = new StringBuilder("Drinks :\n");
         List<Drink> filterDrinks=new ArrayList<>(confectioneryService.getDrinks());
-        filterDrinks.stream().filter(drink -> drink.getAlcoholPercentage() > 0).forEach(drink -> output.append(drink.toString()).append("\n"));
+        filterDrinks.stream().filter(drink -> drink.getAlcoholPercentage() > 0).forEach(drink -> output.append(drink).append("\n"));
         System.out.println(output);
 
     }
@@ -140,11 +142,11 @@ public class ConfectioneryController {
     void filterByExpirationDate(){
         StringBuilder output = new StringBuilder("Cakes :\n");
         List<Cake> filterCakes=new ArrayList<>(confectioneryService.getCakes());
-        filterCakes.stream().filter(cake->cake.getExpirationDate().getYear() <=2024).forEach(filterCake -> output.append(filterCake.toString()).append("\n"));
+        filterCakes.stream().filter(cake->cake.getExpirationDate().getYear() <=2024).forEach(filterCake -> output.append(filterCake).append("\n"));
 
         output.append("Drinks :\n");
         List<Drink> filterDrinks=new ArrayList<>(confectioneryService.getDrinks());
-        filterDrinks.stream().filter(drink -> drink.getExpirationDate().getYear() == 2024 && (drink.getExpirationDate().getMonth()==Month.November || drink.getExpirationDate().getMonth()==Month.December )).forEach(drink -> output.append(drink.toString()).append("\n"));
+        filterDrinks.stream().filter(drink -> drink.getExpirationDate().getYear() == 2024 && (drink.getExpirationDate().getMonth()==Month.November || drink.getExpirationDate().getMonth()==Month.December )).forEach(drink -> output.append(drink).append("\n"));
         System.out.println(output);
     }
     /**
@@ -154,8 +156,7 @@ public class ConfectioneryController {
     public void viewUsers() {
         StringBuilder output = new StringBuilder("List of clients registered in the system: \n");
         for (User user : confectioneryService.getUsers()) {
-            if (user instanceof Client) {
-                Client client = (Client) user;
+            if (user instanceof Client client) {
                 output.append(client).append("\n");
 
                 List<Order> clientOrders = client.getOrders();

@@ -5,6 +5,7 @@ import java.util.Scanner;
 import confectionery.Model.*;
 
 
+import confectionery.Repository.FileRepository;
 import confectionery.Repository.InMemoryRepository;
 import confectionery.Repository.IRepository;
 
@@ -63,29 +64,29 @@ public class ConsoleApp {
         while (clientRunning) {
             System.out.print("""
                     Client Menu:
-                    0. View Menu order by Points
-                    1. View Menu order by Price
-                    2. Place Order
-                    3. Cancel Order
-                    4. Generate Invoice
-                    5. View Profile
-                    6. View Drinks With Alcohol
-                    7. View Products available until December 2024
-                    00. Logout
+                    1. View Menu order by Points
+                    2. View Menu order by Price
+                    3. Place Order
+                    4. Cancel Order
+                    5. Generate Invoice
+                    6. View Profile
+                    7. View Drinks With Alcohol
+                    8. View Products available until December 2024
+                    0. Logout
                     Please select an option:
                     """);
 
             String option = scanner.nextLine();
             switch (option) {
-                case "0" ->confectioneryController.viewMenuPoints();
-                case "1" -> confectioneryController.viewMenuPrice();
-                case "2" -> confectioneryController.placeOrder(scanner);
-                case "3" -> confectioneryController.cancelOrder(scanner);
-                case "4" -> confectioneryController.generateInvoice();
-                case "5" -> confectioneryController.getProfile();
-                case "6" ->confectioneryController.filterByAlcohol();
-                case "7" ->confectioneryController.filterByExpirationDate();
-                case "00" -> clientRunning = false;
+                case "1" ->confectioneryController.viewMenuPoints();
+                case "2" -> confectioneryController.viewMenuPrice();
+                case "3" -> confectioneryController.placeOrder(scanner);
+                case "4" -> confectioneryController.cancelOrder(scanner);
+                case "5" -> confectioneryController.generateInvoice();
+                case "6" -> confectioneryController.getProfile();
+                case "7" ->confectioneryController.filterByAlcohol();
+                case "8" ->confectioneryController.filterByExpirationDate();
+                case "0" -> clientRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -129,19 +130,74 @@ public class ConsoleApp {
      * The controller is then connected to the service.
      * Finally, the application console starts with all the components laid in place.
      */
+//    public static void main(String[] args) {
+//        IRepository<Cake> cakeRepo = createInMemoryCakesRepository();
+//        IRepository<Drink> drinkRepo = createInMemoryDrinksRepository();
+//        IRepository<Order> orderRepo = new InMemoryRepository<>();
+//        IRepository<User> userRepo = createInMemoryUsersRepository();
+//
+//        ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo, drinkRepo, orderRepo, userRepo);
+//        ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);
+//
+//        ConsoleApp consoleApp = new ConsoleApp(confectioneryController);
+//
+//        consoleApp.start();
+//    }
+
+    // STARTING POINT FOR APP USING PERSISTENT MEMORY STORAGE METHOD
     public static void main(String[] args) {
-        IRepository<Cake> cakeRepo = createInMemoryCakesRepository();
-        IRepository<Drink> drinkRepo = createInMemoryDrinksRepository();
-        IRepository<Order> orderRepo = new InMemoryRepository<>();
-        IRepository<User> userRepo = createInMemoryUsersRepository();
+        // Define file paths for each repository
+        String cakeFilePath = "cakes.dat";
+        String drinkFilePath = "drinks.dat";
+        String orderFilePath = "orders.dat";
+        String userFilePath = "users.dat";
+
+        // Create FileRepository instances with the specified file paths
+        IRepository<Cake> cakeRepo = new FileRepository<>(cakeFilePath);
+        IRepository<Drink> drinkRepo = new FileRepository<>(drinkFilePath);
+        IRepository<Order> orderRepo = new FileRepository<>(orderFilePath);
+        IRepository<User> userRepo = new FileRepository<>(userFilePath);
+        // Add data to the file repos for cakes and drinks
+        ExpirationDate expirationDate1 = new ExpirationDate(2026, Month.February, Day.Eleventh);
+        ExpirationDate expirationDate3 = new ExpirationDate(2024, Month.December, Day.Eighteenth);
+        ExpirationDate expirationDate4 = new ExpirationDate(2024, Month.December, Day.First);
+        ExpirationDate expirationDate2 = new ExpirationDate(2024, Month.November, Day.Thirteenth);
+        ExpirationDate expirationDate5 = new ExpirationDate(2024, Month.December, Day.Fourteenth);
+
+        cakeRepo.create(new Cake(1, "Tiramisu", 100, 50, expirationDate3, 140, 1000));
+        cakeRepo.create(new Cake(2, "Eclair", 130, 50, expirationDate4, 120, 1000));
+        cakeRepo.create(new Cake(3, "Dubai Chocolate", 200, 100, expirationDate2, 99, 1200));
+        cakeRepo.create(new Cake(4, "Carrot Cake", 110, 55, expirationDate3, 68, 900));
+        cakeRepo.create(new Cake(5, "Cheesecake", 200, 100, expirationDate1, 100, 500));
+        cakeRepo.create(new Cake(6, "Lemon Cake", 130, 65, expirationDate2, 75, 600));
+        cakeRepo.create(new Cake(7, "Apple Pie", 90, 45, expirationDate5, 60, 950));
+        cakeRepo.create(new Cake(8, "Vanilla Cake", 100, 50, expirationDate2, 108, 1000));
+        cakeRepo.create(new Cake(9, "Pineapple Upside Down Cake", 140, 70, expirationDate5, 95, 650));
+        cakeRepo.create(new Cake(10, "Strawberry Shortcake", 160, 80, expirationDate4, 90, 750));
+
+        ExpirationDate expirationDate6 = new ExpirationDate(2025, Month.April, Day.Fifteenth);
+        ExpirationDate expirationDate7 = new ExpirationDate(2024, Month.May, Day.TwentyFourth);
+        ExpirationDate expirationDate8 = new ExpirationDate(2026, Month.July, Day.TwentyFirst);
+        ExpirationDate expirationDate9 = new ExpirationDate(2023, Month.March, Day.Thirteenth);
+        ExpirationDate expirationDate10 = new ExpirationDate(2027, Month.January, Day.First);
+        drinkRepo.create(new Drink(11, "Water", 10, 50, expirationDate6, 30, 0));
+        drinkRepo.create(new Drink(12, "Cappuccino", 15, 200, expirationDate7, 45, 0));
+        drinkRepo.create(new Drink(13, "Latte", 14, 250, expirationDate8, 68, 0));
+        drinkRepo.create(new Drink(14, "Beer", 19, 200, expirationDate9, 10, 8));
+        drinkRepo.create(new Drink(15, "Tequila", 18, 300, expirationDate10, 15, 6));
+        drinkRepo.create(new Drink(16, "Mocha", 16, 250, expirationDate6, 46, 5));
+        drinkRepo.create(new Drink(17, "Green Tea", 21, 150, expirationDate7, 17, 0));
+        drinkRepo.create(new Drink(18, "Black Tea", 20, 150, expirationDate5, 12, 0));
+        drinkRepo.create(new Drink(19, "Lemonade", 25, 350, expirationDate9, 17, 0));
+        drinkRepo.create(new Drink(20, "Hot Chocolate", 20, 200, expirationDate10, 22, 0));
 
         ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo, drinkRepo, orderRepo, userRepo);
         ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);
 
         ConsoleApp consoleApp = new ConsoleApp(confectioneryController);
-
         consoleApp.start();
     }
+
 
     /**
      * Initializes the cake repository with relevant data.

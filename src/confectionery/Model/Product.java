@@ -4,7 +4,7 @@ package confectionery.Model;
  * class Product which implements the HasId interface
  */
 
-public class Product implements HasID {
+public class Product implements HasID{
 
     private final int idProduct;
     private final String name;

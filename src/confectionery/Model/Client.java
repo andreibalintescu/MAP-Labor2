@@ -1,12 +1,16 @@
 package confectionery.Model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a client who can place orders and view invoices
  */
-public class Client extends User {
+public class Client extends User implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final Integer ClientID;
     private final List<Order> orders = new ArrayList<>();
 

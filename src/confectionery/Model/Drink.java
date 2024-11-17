@@ -1,10 +1,15 @@
 package confectionery.Model;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * class Drink which inheritances from the main class Product
  * a Client can order different types of drinks
  */
-public class Drink extends Product {
+public class Drink extends Product implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final float alcoholPercentage;
     public Drink(int idProduct, String name, float price, float weight, ExpirationDate expirationDate,int points, float alcohol) {
         super(idProduct, name, price, weight, expirationDate,points);

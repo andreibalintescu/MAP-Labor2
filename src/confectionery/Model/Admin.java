@@ -1,11 +1,16 @@
 package confectionery.Model;
 
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * The Admin class represents an administrator user in the system.
  * An admin can log in, view balance details, and perform other administrative tasks.
  */
-public class Admin extends User {
+public class Admin extends User implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private String password;
     private final String email;
@@ -60,6 +65,6 @@ public class Admin extends User {
      */
     @Override
     public String toString() {
-        return "Admin:" + "id" + " " + id + "," + " " + "email" + " " + email;
+        return "Admin:" + "id" + " " + id + ", " + "user" + " " + name + ", "+ "email" + " " + email + ".";
     }
 }

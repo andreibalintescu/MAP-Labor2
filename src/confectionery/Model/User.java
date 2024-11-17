@@ -4,7 +4,7 @@ package confectionery.Model;
  * main class User ,which implemets the HasId interface
  * there are 2 tpes of users ->client and admin
  */
-public abstract class User implements HasID {
+public abstract class User implements HasID{
 
     protected String name;
     protected String address;

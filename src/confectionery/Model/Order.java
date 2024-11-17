@@ -1,5 +1,7 @@
 package confectionery.Model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -8,7 +10,9 @@ import java.util.List;
  * Provides methods to calculate the total price and total points of the order and to add products to the order.
  **/
 
-public class Order implements HasID {
+public class Order implements HasID, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final List<Product> products;
     private final Integer orderID;
     private final LocalDate date;
