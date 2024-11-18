@@ -10,8 +10,8 @@ public class Product implements HasID, Serializable {
 
     private int idProduct;
     private String name;
-    private float price;
-    private float weight;
+    private double price;
+    private double weight;
     private ExpirationDate expirationDate; // Ensure ExpirationDate is Serializable
     private int points;
 
@@ -23,7 +23,7 @@ public class Product implements HasID, Serializable {
      * @param expirationDate the product expiration date
      * @param points         the product points
      */
-    public Product(int idProduct, String name, float price, float weight, ExpirationDate expirationDate, int points) {
+    public Product(int idProduct, String name, double price, double weight, ExpirationDate expirationDate, int points) {
         this.idProduct = idProduct;
         this.name = name;
         this.price = price;
@@ -34,6 +34,10 @@ public class Product implements HasID, Serializable {
 
     public Product() {
         // Default constructor for deserialization
+    }
+
+    public Product(int i) {
+        this.idProduct = i;
     }
 
     /**
@@ -84,14 +88,14 @@ public class Product implements HasID, Serializable {
     /**
      * @return the price.
      */
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
     /**
      * @return the weight.
      */
-    public float getWeight() {
+    public double getWeight() {
         return weight;
     }
 

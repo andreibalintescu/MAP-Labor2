@@ -1,25 +1,27 @@
 package confectionery;
 
 import confectionery.Model.*;
+import confectionery.Repository.CSVFileRepository;
 import confectionery.Repository.FileRepository;
 import confectionery.Repository.IRepository;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
 public class Main {
-    // STARTING POINT FOR APP USING PERSISTENT MEMORY STORAGE METHOD
     public static void main(String[] args) {
-        // Define file paths for each repository
-        String cakeFilePath = "D:\\JavaProjects\\Laboratories\\Labor2\\src\\confectionery\\cakes.dat";
-        String drinkFilePath = "D:\\JavaProjects\\Laboratories\\Labor2\\src\\confectionery\\drinks.dat";
-        String orderFilePath = "D:\\JavaProjects\\Laboratories\\Labor2\\src\\confectionery\\orders.dat";
-        String userFilePath = "D:\\JavaProjects\\Laboratories\\Labor2\\src\\confectionery\\users.dat";
+        String cakeFilePath = "cakes.csv";
+        String drinkFilePath = "drinks.csv";
+        String userFilePath = "users.csv";
+        String orderFilePath = "orders.csv";
 
+        IRepository<Cake> cakeRepo = new CSVFileRepository<>(cakeFilePath, cakeDeserializer, cakeSerializer);
+        IRepository<Drink> drinkRepo = new CSVFileRepository<>(drinkFilePath, drinkDeserializer, drinkSerializer);
+        IRepository<User> userRepo = new CSVFileRepository<>(userFilePath, userDeserializer, userSerializer);
+        IRepository<Order> orderRepo = new CSVFileRepository<>(orderFilePath, orderDeserializer, orderSerializer);
 
-        // Create FileRepository instances with the specified file paths
-        IRepository<Cake> cakeRepo = new FileRepository<>(cakeFilePath);
-        IRepository<Drink> drinkRepo = new FileRepository<>(drinkFilePath);
-        IRepository<Order> orderRepo = new FileRepository<>(orderFilePath);
-        IRepository<User> userRepo = new FileRepository<>(userFilePath);
-        // Add data to the file repos for cakes and drinks
         ExpirationDate expirationDate1 = new ExpirationDate(2026, Month.February, Day.Eleventh);
         ExpirationDate expirationDate3 = new ExpirationDate(2024, Month.December, Day.Eighteenth);
         ExpirationDate expirationDate4 = new ExpirationDate(2024, Month.December, Day.First);
@@ -58,10 +60,160 @@ public class Main {
         userRepo.create(new Client("Ioana", "Bujoreni", 231));
         userRepo.create(new Admin("admin", "admin@gmail.com", 333, "Bali", "Bujoreni"));
 
-        ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo, drinkRepo, orderRepo, userRepo);
+        ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo,drinkRepo,orderRepo,userRepo);
         ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);
-
-        ConsoleApp consoleApp = new ConsoleApp(confectioneryController);
-        consoleApp.start();
+        ConsoleApp app = new ConsoleApp(confectioneryController);
+        app.start();
     }
+
+    static Function<String[], Cake> cakeDeserializer = fields -> {
+        try {
+            return new Cake(
+                    Integer.parseInt(fields[0]), // ID
+                    fields[1],                   // Name
+                    Double.parseDouble(fields[2]), // Price
+                    Double.parseDouble(fields[3]), // Weight
+                    ExpirationDate.parse(fields[4]), // Expiration Date (Assume ExpirationDate.parse exists)
+                    Integer.parseInt(fields[5]),    // Points
+                    Integer.parseInt(fields[6])     // Calories
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    };
+
+    static Function<Cake, String[]> cakeSerializer = cake -> new String[]{
+            String.valueOf(cake.getID()),
+            cake.getName(),
+            String.valueOf(cake.getPrice()),
+            String.valueOf(cake.getWeight()),
+            cake.getExpirationDate().toString(),
+            String.valueOf(cake.getPoints()),
+            String.valueOf(cake.getCalories())
+    };
+
+    static Function<Drink, String[]> drinkSerializer = drink -> new String[]{
+            String.valueOf(drink.getID()),
+            drink.getName(),
+            String.valueOf(drink.getPrice()),
+            String.valueOf(drink.getWeight()),
+            drink.getExpirationDate().toString(),
+            String.valueOf(drink.getPoints()),
+            String.valueOf(drink.getAlcoholPercentage())
+
+    };
+
+    static Function<String[], Drink> drinkDeserializer = fields -> {
+        try{
+            return new Drink(
+                    Integer.parseInt(fields[0]),
+                    fields[1],
+                    Double.parseDouble(fields[2]),
+                    Double.parseDouble(fields[3]),
+                    ExpirationDate.parse(fields[4]),
+                    Integer.parseInt(fields[5]),
+                    Double.parseDouble(fields[6])
+            );
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    };
+
+    static Function<String[], User> userDeserializer = fields -> {
+        String type = fields[0]; // "Admin" or "Client"
+        try {
+            if ("Admin".equals(type)) {
+                return new Admin(
+                        fields[4],                 // Password
+                        fields[5],                 // Email
+                        Integer.parseInt(fields[1]), // ID
+                        fields[2],                 // Name
+                        fields[3]                  // Address
+                );
+            } else if ("Client".equals(type)) {
+                Client client = new Client(
+                        fields[2],                 // Name
+                        fields[3],                 // Address
+                        Integer.parseInt(fields[1]) // ID
+                );
+                // Store order IDs (comma-separated string) as a reference for later processing
+                if (fields.length > 4 && !fields[4].isEmpty()) {
+                    String[] orderIDs = fields[4].split(",");
+                    for (String orderID : orderIDs) {
+                        // Simply associate the IDs; do not deserialize the full orders here
+                        client.placeOrder(new Order(Integer.parseInt(orderID))); // Placeholder for ID-only orders
+                    }
+                }
+                return client;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    };
+
+
+    static Function<User, String[]> userSerializer = user -> {
+        if (user instanceof Admin admin) {
+            return new String[]{
+                    "Admin",
+                    String.valueOf(admin.getID()),
+                    admin.getName(),
+                    admin.getAddress(),
+                    admin.getPassword(),
+                    admin.getEmail()
+            };
+        } else if (user instanceof Client client) {
+            // Serialize order IDs as a comma-separated string
+            String orderIds = client.getOrders().stream()
+                    .map(order -> String.valueOf(order.getID()))
+                    .reduce((id1, id2) -> id1 + "," + id2)
+                    .orElse("");
+            return new String[]{
+                    "Client",
+                    String.valueOf(client.getID()),
+                    client.getName(),
+                    client.getAddress(),
+                    orderIds
+            };
+        }
+        return new String[0];
+    };
+
+    static Function<Order, String[]> orderSerializer = order -> {
+        String productIds = order.getProducts().stream()
+                .map(product -> String.valueOf(product.getID()))
+                .reduce((id1, id2) -> id1 + "," + id2)
+                .orElse(""); // Empty if no products
+        return new String[]{
+                String.valueOf(order.getID()),
+                order.getDate().toString(),
+                productIds
+        };
+    };
+
+    static Function<String[], Order> orderDeserializer = fields -> {
+        try {
+            Integer orderID = Integer.parseInt(fields[0]);
+            LocalDate date = LocalDate.parse(fields[1]);
+            List<Product> products = new ArrayList<>();
+
+            if (fields.length > 2 && !fields[2].isEmpty()) {
+                String[] productIDs = fields[2].split(",");
+                for (String productId : productIDs) {
+                    // Placeholder for product IDs; actual resolution happens later
+                    products.add(new Product(Integer.parseInt(productId)));
+                }
+            }
+            return new Order(products, orderID, date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    };
+
+
+
 }

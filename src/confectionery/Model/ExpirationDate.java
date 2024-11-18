@@ -49,10 +49,26 @@ public class ExpirationDate implements Serializable {
      */
     @Override
     public String toString() {
-        return "ExpirationDate{" +
-                "year=" + year +
-                ", month=" + month +
-                ", day=" + day +
-                '}';
+        return year + "-" + month.name() + "-" + day.name();
+    }
+    /**
+     * Parses a string representation of an expiration date in the format "YYYY-MONTH-DAY"
+     * and returns an ExpirationDate object.
+     *
+     * @param dateStr the string to parse (e.g., "2024-December-Eighteenth")
+     * @return an ExpirationDate object
+     * @throws IllegalArgumentException if the format is invalid
+     */
+    public static ExpirationDate parse(String dateStr) {
+        try {
+            String[] parts = dateStr.split("-");
+            int year = Integer.parseInt(parts[0]);
+            Month month = Month.valueOf(parts[1]);
+            Day day = Day.valueOf(parts[2]);
+
+            return new ExpirationDate(year, month, day);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid date format: " + dateStr, e);
+        }
     }
 }

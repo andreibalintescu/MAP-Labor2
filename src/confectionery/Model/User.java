@@ -25,6 +25,24 @@ public abstract class User implements HasID, Serializable {
 
     }
 
+    /**
+     * Gets the name of the user.
+     *
+     * @return the user's name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets the address of the user.
+     *
+     * @return the user's address.
+     */
+    public String getAddress() {
+        return address;
+    }
+
     // Custom serialization method
     @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {

@@ -181,11 +181,12 @@ public class ConfectioneryController {
 
     public void viewMostPoints() {
         User client = confectioneryService.getClientWithMostPoints();
-        System.out.println("The client with the most points is  ");
-        System.out.println(client);
-        Client client1 = (Client) client;
-        System.out.println("Total points: " + client1.grandTotalPoints());
-
+        if(client == null)
+            System.out.println("No results found.");
+        else{
+            System.out.println("The client with the most points is  ");
+            System.out.println(client + ", has" + ((Client) client).grandTotalPoints());
+        }
     }
     /**
      * Allows the client to place an order by entering cake and drink IDs.
@@ -319,5 +320,14 @@ public class ConfectioneryController {
             System.out.println("Password changed successfully!");
         else
             System.out.println("Failed to change password!");
+    }
+
+    public void deleteUser(Scanner scanner) {
+        System.out.println("Enter the id of the user you want to delete from the system:");
+        Integer id = Integer.parseInt(scanner.nextLine());
+        if(confectioneryService.deleteUser(id))
+            System.out.println("User deleted successfully!");
+        else
+            System.out.println("Failed to delete user!");
     }
 }

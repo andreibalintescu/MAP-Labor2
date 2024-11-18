@@ -10,8 +10,8 @@ import java.io.Serializable;
 public class Drink extends Product implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private float alcoholPercentage;
-    public Drink(int idProduct, String name, float price, float weight, ExpirationDate expirationDate,int points, float alcohol) {
+    private double alcoholPercentage;
+    public Drink(int idProduct, String name, double price, double weight, ExpirationDate expirationDate,int points, double alcohol) {
         super(idProduct, name, price, weight, expirationDate,points);
         this.alcoholPercentage = alcohol;
     }
@@ -23,7 +23,7 @@ public class Drink extends Product implements Serializable {
     /**
      * gets the alcohol from the Drinks
      */
-    public  float getAlcoholPercentage() {
+    public  double getAlcoholPercentage() {
         return alcoholPercentage;
     }
 

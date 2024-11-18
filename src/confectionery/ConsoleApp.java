@@ -102,6 +102,7 @@ public class ConsoleApp {
                     6. View Client with the most Points
                     7. Change Password
                     8. Update Products
+                    9. Delete User
                     0. Logout
                     Please select an option:
                     """);
@@ -116,6 +117,7 @@ public class ConsoleApp {
                 case "6" -> confectioneryController.viewMostPoints();
                 case "7" -> confectioneryController.changePassword(scanner);
                 case "8" -> confectioneryController.updateProduct(scanner);
+                case "9" -> confectioneryController.deleteUser(scanner);
                 case "0" -> adminRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }

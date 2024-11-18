@@ -66,8 +66,6 @@ public class FileRepository<T extends HasID> implements IRepository<T> {
         }
     }
 
-
-
     private void writeDataToFile(Map<Integer, T> data) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
             oos.writeObject(data);

@@ -3,6 +3,7 @@ package confectionery.Model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,13 @@ public class Order implements HasID, Serializable {
         this.orderID = orderID;
         this.date = date;
     }
+
+    public Order(Integer orderID) {
+        this.products = new ArrayList<>(); // Placeholder for products; actual data resides in OrderRepository
+        this.orderID = orderID;
+        this.date = null; // Placeholder; the actual date will be fetched from the repository
+    }
+
 
     /**
      * Calculates the total price of the order by summing the prices of all products in the order
