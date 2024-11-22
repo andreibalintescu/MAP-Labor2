@@ -26,7 +26,7 @@ public class CSVFileRepository<T extends HasID> implements IRepository<T> {
     @Override
     public void create(T obj) {
         if (getAll().stream().anyMatch(existing -> existing.getID().equals(obj.getID()))) {
-           // System.out.println("Object with ID " + obj.getID() + " already exists. Skipping creation.");
+            // System.out.println("Object with ID " + obj.getID() + " already exists. Skipping creation.");
             return;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
@@ -43,7 +43,7 @@ public class CSVFileRepository<T extends HasID> implements IRepository<T> {
     public T get(Integer id) {
         T found = getAll().stream().filter(obj -> obj.getID().equals(id)).findFirst().orElse(null);
         if (found == null) {
-           // System.out.println("Object with ID " + id + " not found.");
+            // System.out.println("Object with ID " + id + " not found.");
         } else {
             //System.out.println("Retrieved object with ID " + id);
         }

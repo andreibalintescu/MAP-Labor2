@@ -95,18 +95,18 @@ public class ConfectioneryController {
      */
 
 
-     void viewMenuPrice(){
-         StringBuilder output = new StringBuilder("Cakes :\n");
-         List<Cake> sortedCakes=new ArrayList<>(confectioneryService.getCakes());
-         sortedCakes.sort(Comparator.comparing(Cake::getPrice));
+    void viewMenuPrice(){
+        StringBuilder output = new StringBuilder("Cakes :\n");
+        List<Cake> sortedCakes=new ArrayList<>(confectioneryService.getCakes());
+        sortedCakes.sort(Comparator.comparing(Cake::getPrice));
 
-         List<Drink> sortedDrinks=new ArrayList<>(confectioneryService.getDrinks());
-         sortedDrinks.sort(Comparator.comparing(Drink::getPrice));
-         sortedCakes.forEach(cake -> output.append(cake.toString()).append("\n"));
-         output.append(" Drinks : \n");
-         sortedDrinks.forEach(drink -> output.append(drink.toString()).append("\n"));
-         System.out.println(output);
-     }
+        List<Drink> sortedDrinks=new ArrayList<>(confectioneryService.getDrinks());
+        sortedDrinks.sort(Comparator.comparing(Drink::getPrice));
+        sortedCakes.forEach(cake -> output.append(cake.toString()).append("\n"));
+        output.append(" Drinks : \n");
+        sortedDrinks.forEach(drink -> output.append(drink.toString()).append("\n"));
+        System.out.println(output);
+    }
 
     /**
      * Displays the menu of cakes and drinks available for purchase order by price
