@@ -137,28 +137,28 @@ public class ConsoleApp {
      */
     public static void main(String[] args) {
         //in memory
-        IRepository<Cake> cakeRepo = createInMemoryCakesRepository();
-        IRepository<Drink> drinkRepo = createInMemoryDrinksRepository();
-        IRepository<Order> orderRepo = new InMemoryRepository<>();
-        IRepository<User> userRepo = createInMemoryUsersRepository();
+//        IRepository<Cake> cakeRepo = createInMemoryCakesRepository();
+//        IRepository<Drink> drinkRepo = createInMemoryDrinksRepository();
+//        IRepository<Order> orderRepo = new InMemoryRepository<>();
+//        IRepository<User> userRepo = createInMemoryUsersRepository();
 
 
         //filerepository
 
-//        String cakeFilePath = "cakes.csv";
-//        String drinkFilePath = "drinks.csv";
-//        String userFilePath = "users.csv";
-//        String orderFilePath = "orders.csv";
-//
-//
-//        IRepository<Cake> cakeRepo = new FileRepository<>(cakeFilePath);
-//        IRepository<Drink> drinkRepo = new FileRepository<>(drinkFilePath);
-//        IRepository<User> userRepo = new FileRepository<>(userFilePath);
-//        IRepository<Order> orderRepo = new FileRepository<>(orderFilePath);
-//
-//        intializeCakeRepository(cakeRepo);
-//        initializeDrinkRepository(drinkRepo);
-//        initializeUserRepository(userRepo);
+        String cakeFilePath = "cakes.csv";
+        String drinkFilePath = "drinks.csv";
+        String userFilePath = "users.csv";
+        String orderFilePath = "orders.csv";
+
+
+        IRepository<Cake> cakeRepo = new FileRepository<>(cakeFilePath);
+        IRepository<Drink> drinkRepo = new FileRepository<>(drinkFilePath);
+        IRepository<User> userRepo = new FileRepository<>(userFilePath);
+        IRepository<Order> orderRepo = new FileRepository<>(orderFilePath);
+
+        intializeCakeRepository(cakeRepo);
+        initializeDrinkRepository(drinkRepo);
+        initializeUserRepository(userRepo);
 
 
         ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo, drinkRepo, orderRepo, userRepo);

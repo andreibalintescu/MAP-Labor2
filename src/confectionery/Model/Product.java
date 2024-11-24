@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * Class Product which implements the HasId interface.
  */
-public class Product implements HasID, Serializable {
+public abstract class Product implements HasID, Serializable {
 
     private int idProduct;
     private String name;
