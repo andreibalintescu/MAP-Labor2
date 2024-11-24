@@ -206,19 +206,9 @@ public class ConfectioneryController {
         else System.out.println("Failed to place order!.");
 
     }
-    /**
-     * Allows the client to cancel a previously placed order.
-     * @param scanner The scanner object to capture user input.
-     */
 
-    public void cancelOrder(Scanner scanner) {
-        System.out.println("Enter the Id of the order you would like to delete from the receipt or 0 to cancel the request:");
-        int id = Integer.parseInt(scanner.nextLine());
-        if (id != 0) {
-            confectioneryService.deleteOrder(id);
-            System.out.println("Order canceled successfully!");
-        } else System.out.println("Request canceled!");
-    }
+
+
 
     /**
      *  Allows the admin to change the points from the product
@@ -280,7 +270,7 @@ public class ConfectioneryController {
         System.out.println(confectioneryService.getLoggedInUser().toString());
     }
 
-    //Misc.
+
     /**
      * Parses a space-separated string of IDs into a list of integers.
      * @param input The space-separated string of IDs.
@@ -306,6 +296,7 @@ public class ConfectioneryController {
         return (int) (Math.random() * 1000);
     }
 
+
     /**
      * Allows the user to change their password.
      * @param scanner The scanner object to capture user input.
@@ -322,6 +313,10 @@ public class ConfectioneryController {
             System.out.println("Failed to change password!");
     }
 
+    /**
+     * Allows the admin to delete a user
+     * @param scanner The scanner object to capture user input.
+     */
     public void deleteUser(Scanner scanner) {
         System.out.println("Enter the id of the user you want to delete from the system:");
         Integer id = Integer.parseInt(scanner.nextLine());

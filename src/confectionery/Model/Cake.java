@@ -9,16 +9,13 @@ import java.io.Serializable;
  * a Client can order different types of cakes
  */
 public class Cake extends Product implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+
     private int calories;
     public Cake(int idProduct, String name, double price, double weight, ExpirationDate expirationDate,int points, int calories) {
         super(idProduct, name, price, weight, expirationDate,points);
         this.calories=calories;
     }
 
-    public Cake() {
-    }
 
     /**
      * gets the calories from the Cake

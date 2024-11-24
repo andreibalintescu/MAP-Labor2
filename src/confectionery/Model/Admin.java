@@ -9,8 +9,6 @@ import java.io.Serializable;
  * An admin can log in, view balance details, and perform other administrative tasks.
  */
 public class Admin extends User implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private String password;
     private String email;
@@ -28,10 +26,6 @@ public class Admin extends User implements Serializable {
         this.password = password;
         this.email = email;
         this.id = id;
-
-    }
-
-    public Admin(){
 
     }
 

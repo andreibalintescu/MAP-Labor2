@@ -12,8 +12,6 @@ import java.util.List;
  **/
 
 public class Order implements HasID, Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
     private final List<Product> products;
     private final Integer orderID;
     private final LocalDate date;
@@ -27,12 +25,6 @@ public class Order implements HasID, Serializable {
         this.products = products;
         this.orderID = orderID;
         this.date = date;
-    }
-
-    public Order(Integer orderID) {
-        this.products = new ArrayList<>(); // Placeholder for products; actual data resides in OrderRepository
-        this.orderID = orderID;
-        this.date = null; // Placeholder; the actual date will be fetched from the repository
     }
 
 

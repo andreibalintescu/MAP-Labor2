@@ -9,8 +9,7 @@ import java.util.List;
  * Represents a client who can place orders and view invoices
  */
 public class Client extends User implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+
     private Integer ClientID;
     private final List<Order> orders = new ArrayList<>();
 
@@ -24,9 +23,6 @@ public class Client extends User implements Serializable {
         this.ClientID = Id;
     }
 
-    public Client(){
-
-    }
     /**
      * @return the client id
      **/

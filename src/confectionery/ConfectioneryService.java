@@ -138,6 +138,27 @@ public class ConfectioneryService {
      * @return true if the order is successfully placed, false if no products were selected.
      */
 
+//    public boolean placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
+//        List<Product> products = new ArrayList<>();
+//        Order order = new Order(products, orderIdCounter++, LocalDate.now());
+//
+//        for (int cakeId : cakeIds) {
+//            if (menu.get(cakeId) != null) order.addProduct(menu.get(cakeId));
+//        }
+//
+//        for (int drinkId : drinkIds) {
+//            if (drink.get(drinkId) != null) order.addProduct(drink.get(drinkId));
+//        }
+//
+//        if (order.getProducts().isEmpty()) return false;
+//
+//        orderRepository.create(order); // Add the Order in the Repository
+//
+//        ((Client) loggedInUser).placeOrder(order); // Add Order internally in the current Client
+//        return true;
+//
+//    }
+
     public boolean placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
         List<Product> products = new ArrayList<>();
         Order order = new Order(products, orderIdCounter++, LocalDate.now());
@@ -152,11 +173,11 @@ public class ConfectioneryService {
 
         if (order.getProducts().isEmpty()) return false;
 
-        orderRepository.create(order); // Add the Order in the Repository
+        orderRepository.create(order);
+        ((Client) loggedInUser).placeOrder(order);
 
-        ((Client) loggedInUser).placeOrder(order); // Add Order internally in the current Client
+        users.update(loggedInUser);
         return true;
-
     }
 
     /**
@@ -287,6 +308,12 @@ public class ConfectioneryService {
             return true;
         }
     }
+
+    /**
+     *
+     * @param id the id of the user tht is going to be deleted
+     * @return true if the user is deleted
+     */
 
     public boolean deleteUser(Integer id) {
         if (users.get(id) == null) return false;

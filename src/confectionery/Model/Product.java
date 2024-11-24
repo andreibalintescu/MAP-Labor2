@@ -6,7 +6,6 @@ import java.io.*;
  * Class Product which implements the HasId interface.
  */
 public class Product implements HasID, Serializable {
-    private static final long serialVersionUID = 1L;
 
     private int idProduct;
     private String name;
@@ -32,13 +31,6 @@ public class Product implements HasID, Serializable {
         this.points = points;
     }
 
-    public Product() {
-        // Default constructor for deserialization
-    }
-
-    public Product(int i) {
-        this.idProduct = i;
-    }
 
     /**
      * Prints the expiration date from the product.
@@ -144,23 +136,4 @@ public class Product implements HasID, Serializable {
                 '}';
     }
 
-    /**
-     * Custom serialization method.
-     */
-    @Serial
-    private void writeObject(ObjectOutputStream oos) throws IOException {
-        oos.defaultWriteObject(); // Serialize non-transient fields
-        oos.writeObject(name);
-        oos.writeObject(expirationDate);
-    }
-
-    /**
-     * Custom deserialization method.
-     */
-    @Serial
-    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        ois.defaultReadObject(); // Deserialize non-transient fields
-        name = (String) ois.readObject();
-        expirationDate = (ExpirationDate) ois.readObject();
-    }
 }

@@ -8,17 +8,13 @@ import java.io.Serializable;
  * a Client can order different types of drinks
  */
 public class Drink extends Product implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+
     private double alcoholPercentage;
     public Drink(int idProduct, String name, double price, double weight, ExpirationDate expirationDate,int points, double alcohol) {
         super(idProduct, name, price, weight, expirationDate,points);
         this.alcoholPercentage = alcohol;
     }
 
-    public Drink() {
-
-    }
 
     /**
      * gets the alcohol from the Drinks

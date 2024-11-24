@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.function.Function;
 
 import confectionery.Model.*;
-import confectionery.Repository.CSVFileRepository;
+import confectionery.Repository.FileRepository;
 import confectionery.Repository.InMemoryRepository;
 import confectionery.Repository.IRepository;
 
@@ -70,11 +70,10 @@ public class ConsoleApp {
                     1. View Menu order by Points
                     2. View Menu order by Price
                     3. Place Order
-                    4. Cancel Order
-                    5. Generate Invoice
-                    6. View Profile
-                    7. View Drinks With Alcohol
-                    8. View Products available until December 2024
+                    4. Generate Invoice
+                    5. View Profile
+                    6. View Drinks With Alcohol
+                    7. View Products available until December 2024
                     0. Logout
                     Please select an option:
                     """);
@@ -84,11 +83,10 @@ public class ConsoleApp {
                 case "1" ->confectioneryController.viewMenuPoints();
                 case "2" -> confectioneryController.viewMenuPrice();
                 case "3" -> confectioneryController.placeOrder(scanner);
-                case "4" -> confectioneryController.cancelOrder(scanner);
-                case "5" -> confectioneryController.generateInvoice();
-                case "6" -> confectioneryController.getProfile();
-                case "7" ->confectioneryController.filterByAlcohol();
-                case "8" ->confectioneryController.filterByExpirationDate();
+                case "4" -> confectioneryController.generateInvoice();
+                case "5" -> confectioneryController.getProfile();
+                case "6" ->confectioneryController.filterByAlcohol();
+                case "7" ->confectioneryController.filterByExpirationDate();
                 case "0" -> clientRunning = false;
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -139,27 +137,28 @@ public class ConsoleApp {
      */
     public static void main(String[] args) {
         //in memory
-//        IRepository<Cake> cakeRepo = createInMemoryCakesRepository();
-//        IRepository<Drink> drinkRepo = createInMemoryDrinksRepository();
-//        IRepository<Order> orderRepo = new InMemoryRepository<>();
-//        IRepository<User> userRepo = createInMemoryUsersRepository();
+        IRepository<Cake> cakeRepo = createInMemoryCakesRepository();
+        IRepository<Drink> drinkRepo = createInMemoryDrinksRepository();
+        IRepository<Order> orderRepo = new InMemoryRepository<>();
+        IRepository<User> userRepo = createInMemoryUsersRepository();
 
 
         //filerepository
 
-        String cakeFilePath = "cakes.csv";
-        String drinkFilePath = "drinks.csv";
-        String userFilePath = "users.csv";
-        String orderFilePath = "orders.csv";
-
-        IRepository<Cake> cakeRepo = new CSVFileRepository<>(cakeFilePath, cakeDeserializer, cakeSerializer);
-        IRepository<Drink> drinkRepo = new CSVFileRepository<>(drinkFilePath, drinkDeserializer, drinkSerializer);
-        IRepository<User> userRepo = new CSVFileRepository<>(userFilePath, userDeserializer, userSerializer);
-        IRepository<Order> orderRepo = new CSVFileRepository<>(orderFilePath, orderDeserializer, orderSerializer);
-
-        intializeCakeRepository(cakeRepo);
-        initializeDrinkRepository(drinkRepo);
-        initializeUserRepository(userRepo);
+//        String cakeFilePath = "cakes.csv";
+//        String drinkFilePath = "drinks.csv";
+//        String userFilePath = "users.csv";
+//        String orderFilePath = "orders.csv";
+//
+//
+//        IRepository<Cake> cakeRepo = new FileRepository<>(cakeFilePath);
+//        IRepository<Drink> drinkRepo = new FileRepository<>(drinkFilePath);
+//        IRepository<User> userRepo = new FileRepository<>(userFilePath);
+//        IRepository<Order> orderRepo = new FileRepository<>(orderFilePath);
+//
+//        intializeCakeRepository(cakeRepo);
+//        initializeDrinkRepository(drinkRepo);
+//        initializeUserRepository(userRepo);
 
 
         ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo, drinkRepo, orderRepo, userRepo);
@@ -215,6 +214,7 @@ public class ConsoleApp {
         userRepo.create(new Client("Maria", "Bujoreni", 312));
         userRepo.create(new Client("Ioana", "Bujoreni", 231));
         userRepo.create(new Admin("admin", "admin@gmail.com", 333, "Bali", "Bujoreni"));
+
 
     }
     /**
@@ -288,155 +288,4 @@ public class ConsoleApp {
     }
 
 
-
-
-
-
-    static Function<String[], Cake> cakeDeserializer = fields -> {
-        try {
-            return new Cake(
-                    Integer.parseInt(fields[0]), // ID
-                    fields[1],                   // Name
-                    Double.parseDouble(fields[2]), // Price
-                    Double.parseDouble(fields[3]), // Weight
-                    ExpirationDate.parse(fields[4]), // Expiration Date (Assume ExpirationDate.parse exists)
-                    Integer.parseInt(fields[5]),    // Points
-                    Integer.parseInt(fields[6])     // Calories
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    };
-
-    static Function<Cake, String[]> cakeSerializer = cake -> new String[]{
-            String.valueOf(cake.getID()),
-            cake.getName(),
-            String.valueOf(cake.getPrice()),
-            String.valueOf(cake.getWeight()),
-            cake.getExpirationDate().toString(),
-            String.valueOf(cake.getPoints()),
-            String.valueOf(cake.getCalories())
-    };
-
-    static Function<Drink, String[]> drinkSerializer = drink -> new String[]{
-            String.valueOf(drink.getID()),
-            drink.getName(),
-            String.valueOf(drink.getPrice()),
-            String.valueOf(drink.getWeight()),
-            drink.getExpirationDate().toString(),
-            String.valueOf(drink.getPoints()),
-            String.valueOf(drink.getAlcoholPercentage())
-
-    };
-
-    static Function<String[], Drink> drinkDeserializer = fields -> {
-        try{
-            return new Drink(
-                    Integer.parseInt(fields[0]),
-                    fields[1],
-                    Double.parseDouble(fields[2]),
-                    Double.parseDouble(fields[3]),
-                    ExpirationDate.parse(fields[4]),
-                    Integer.parseInt(fields[5]),
-                    Double.parseDouble(fields[6])
-            );
-        }catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    };
-
-    static Function<String[], User> userDeserializer = fields -> {
-        String type = fields[0]; // "Admin" or "Client"
-        try {
-            if ("Admin".equals(type)) {
-                return new Admin(
-                        fields[4],                 // Password
-                        fields[5],                 // Email
-                        Integer.parseInt(fields[1]), // ID
-                        fields[2],                 // Name
-                        fields[3]                  // Address
-                );
-            } else if ("Client".equals(type)) {
-                Client client = new Client(
-                        fields[2],                 // Name
-                        fields[3],                 // Address
-                        Integer.parseInt(fields[1]) // ID
-                );
-                // Store order IDs (comma-separated string) as a reference for later processing
-                if (fields.length > 4 && !fields[4].isEmpty()) {
-                    String[] orderIDs = fields[4].split(",");
-                    for (String orderID : orderIDs) {
-                        // Simply associate the IDs; do not deserialize the full orders here
-                        client.placeOrder(new Order(Integer.parseInt(orderID))); // Placeholder for ID-only orders
-                    }
-                }
-                return client;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    };
-
-
-    static Function<User, String[]> userSerializer = user -> {
-        if (user instanceof Admin admin) {
-            return new String[]{
-                    "Admin",
-                    String.valueOf(admin.getID()),
-                    admin.getName(),
-                    admin.getAddress(),
-                    admin.getPassword(),
-                    admin.getEmail()
-            };
-        } else if (user instanceof Client client) {
-            // Serialize order IDs as a comma-separated string
-            String orderIds = client.getOrders().stream()
-                    .map(order -> String.valueOf(order.getID()))
-                    .reduce((id1, id2) -> id1 + "," + id2)
-                    .orElse("");
-            return new String[]{
-                    "Client",
-                    String.valueOf(client.getID()),
-                    client.getName(),
-                    client.getAddress(),
-                    orderIds
-            };
-        }
-        return new String[0];
-    };
-
-    static Function<Order, String[]> orderSerializer = order -> {
-        String productIds = order.getProducts().stream()
-                .map(product -> String.valueOf(product.getID()))
-                .reduce((id1, id2) -> id1 + "," + id2)
-                .orElse(""); // Empty if no products
-        return new String[]{
-                String.valueOf(order.getID()),
-                order.getDate().toString(),
-                productIds
-        };
-    };
-
-    static Function<String[], Order> orderDeserializer = fields -> {
-        try {
-            Integer orderID = Integer.parseInt(fields[0]);
-            LocalDate date = LocalDate.parse(fields[1]);
-            List<Product> products = new ArrayList<>();
-
-            if (fields.length > 2 && !fields[2].isEmpty()) {
-                String[] productIDs = fields[2].split(",");
-                for (String productId : productIDs) {
-                    // Placeholder for product IDs; actual resolution happens later
-                    products.add(new Product(Integer.parseInt(productId)));
-                }
-            }
-            return new Order(products, orderID, date);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    };
 }

@@ -21,9 +21,6 @@ public abstract class User implements HasID, Serializable {
         this.address = address;
     }
 
-    public User(){
-
-    }
 
     /**
      * Gets the name of the user.
@@ -43,21 +40,6 @@ public abstract class User implements HasID, Serializable {
         return address;
     }
 
-    // Custom serialization method
-    @Serial
-    private void writeObject(ObjectOutputStream oos) throws IOException {
-        oos.defaultWriteObject(); // Serialize non-transient fields
-        oos.writeObject(name);
-        oos.writeObject(address);
-    }
-
-    // Custom deserialization method
-    @Serial
-    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        ois.defaultReadObject(); // Deserialize non-transient fields
-        name = (String) ois.readObject();
-        address = (String) ois.readObject();
-    }
 
     public abstract String toString();
 
