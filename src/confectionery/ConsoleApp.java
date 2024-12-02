@@ -1,16 +1,17 @@
 package confectionery;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Function;
 
+import confectionery.Exception.EntityNotFoundException;
 import confectionery.Model.*;
 import confectionery.Repository.FileRepository;
 import confectionery.Repository.InMemoryRepository;
 import confectionery.Repository.IRepository;
+import confectionery.Exception.ValidationException;
 
 /**
  * The class ConsoleApp represents the implementation of the interface layer.
@@ -31,7 +32,8 @@ public class ConsoleApp {
         boolean running = true;
 
         while (running) {
-            System.out.print("""
+            try {
+                System.out.print("""
                     Welcome to the Confectionery App!
                     1. Create account
                     2. Login as Administrator
@@ -40,32 +42,47 @@ public class ConsoleApp {
                     Please select an option:
                     """);
 
-            String option = scanner.nextLine();
-            switch (option) {
-                case "1":
-                    confectioneryController.createAccount(scanner);
-                    break;
-                case "2":
-                    if (confectioneryController.loginAdmin(scanner))
-                        adminMenu();
-                    break;
-                case "3":
-                    if (confectioneryController.loginClient(scanner))
-                        clientMenu();
-                    break;
-                case "0":
-                    System.out.println("Thank you for using Confectionery!");
-                    running = false;
-                    break;
+                String option = scanner.nextLine();
+
+
+                if (!isValidOption(option, "1", "2", "3", "0")) {
+                    throw new ValidationException("Invalid option. Please select a valid option.");
+                }
+
+                switch (option) {
+                    case "1":
+                        confectioneryController.createAccount(scanner);
+                        break;
+                    case "2":
+                        if (confectioneryController.loginAdmin(scanner)) {
+                            adminMenu();
+                        }
+                        break;
+                    case "3":
+                        if (confectioneryController.loginClient(scanner)) {
+                            clientMenu();
+                        }
+                        break;
+                    case "0":
+                        System.out.println("Thank you for using Confectionery!");
+                        running = false;
+                        break;
+                    default:
+                        throw new ValidationException("Invalid option. Please select a valid option.");
+                }
+            } catch (ValidationException e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
-
     }
+
+
 
     private void clientMenu() {
         boolean clientRunning = true;
         while (clientRunning) {
-            System.out.print("""
+            try {
+                System.out.print("""
                     Client Menu:
                     1. View Menu order by Points
                     2. View Menu order by Price
@@ -78,25 +95,35 @@ public class ConsoleApp {
                     Please select an option:
                     """);
 
-            String option = scanner.nextLine();
-            switch (option) {
-                case "1" ->confectioneryController.viewMenuPoints();
-                case "2" -> confectioneryController.viewMenuPrice();
-                case "3" -> confectioneryController.placeOrder(scanner);
-                case "4" -> confectioneryController.generateInvoice();
-                case "5" -> confectioneryController.getProfile();
-                case "6" ->confectioneryController.filterByAlcohol();
-                case "7" ->confectioneryController.filterByExpirationDate();
-                case "0" -> clientRunning = false;
-                default -> System.out.println("Invalid option. Please try again.");
+                String option = scanner.nextLine().trim();
+
+                if (!isValidOption(option, "1", "2", "3", "4", "5", "6", "7", "0")) {
+                    throw new ValidationException("Invalid option. Please select a valid option.");
+                }
+
+
+                switch (option) {
+                    case "1" -> confectioneryController.viewMenuPoints();
+                    case "2" -> confectioneryController.viewMenuPrice();
+                    case "3" -> confectioneryController.placeOrder(scanner);
+                    case "4" -> confectioneryController.generateInvoice();
+                    case "5" -> confectioneryController.getProfile();
+                    case "6" -> confectioneryController.filterByAlcohol();
+                    case "7" -> confectioneryController.filterByExpirationDate();
+                    case "0" -> clientRunning = false;
+                }
+            } catch (ValidationException e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
 
+
     private void adminMenu() {
         boolean adminRunning = true;
         while (adminRunning) {
-            System.out.print("""
+            try {
+                System.out.print("""
                     Admin Menu:
                     1. View Total Balance
                     2. View Monthly Balance
@@ -111,22 +138,31 @@ public class ConsoleApp {
                     Please select an option:
                     """);
 
-            String option = scanner.nextLine();
-            switch (option) {
-                case "1" -> confectioneryController.getBalanceTotal();
-                case "2" -> confectioneryController.generateMonthlyBalance(scanner);
-                case "3" -> confectioneryController.generateYearlyBalance(scanner);
-                case "4" -> confectioneryController.viewUsers();
-                case "5" -> confectioneryController.getProfile();
-                case "6" -> confectioneryController.viewMostPoints();
-                case "7" -> confectioneryController.changePassword(scanner);
-                case "8" -> confectioneryController.updateProduct(scanner);
-                case "9" -> confectioneryController.deleteUser(scanner);
-                case "0" -> adminRunning = false;
-                default -> System.out.println("Invalid option. Please try again.");
+                String option = scanner.nextLine().trim();
+
+
+                if (!isValidOption(option, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0")) {
+                    throw new ValidationException("Invalid option. Please select a valid option.");
+                }
+
+                switch (option) {
+                    case "1" -> confectioneryController.getBalanceTotal();
+                    case "2" -> confectioneryController.generateMonthlyBalance(scanner);
+                    case "3" -> confectioneryController.generateYearlyBalance(scanner);
+                    case "4" -> confectioneryController.viewUsers();
+                    case "5" -> confectioneryController.getProfile();
+                    case "6" -> confectioneryController.viewMostPoints();
+                    case "7" -> confectioneryController.changePassword(scanner);
+                    case "8" -> confectioneryController.updateProduct(scanner);
+                    case "9" -> confectioneryController.deleteUser(scanner);
+                    case "0" -> adminRunning = false;
+                }
+            } catch (ValidationException e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
+
 
     /**
      * Start point of the application.
@@ -167,6 +203,21 @@ public class ConsoleApp {
         ConsoleApp consoleApp = new ConsoleApp(confectioneryController);
 
         consoleApp.start();
+    }
+
+    /**
+     *
+     * @param option is the option introduced by the client or admin
+     * @param validOptions the option that are correct
+     * @return true if the option is right or false otherwise
+     */
+    private boolean isValidOption(String option, String... validOptions) {
+        for (String validOption : validOptions) {
+            if (validOption.equals(option)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void intializeCakeRepository(IRepository<Cake> cakeRepo) {

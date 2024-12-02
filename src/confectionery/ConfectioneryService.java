@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import confectionery.Exception.BusinessLogicException;
 import confectionery.Model.*;
 import confectionery.Repository.IRepository;
+import confectionery.Exception.EntityNotFoundException;
 
 /**
  * The service layer computes the information received from the controller and applies business logic to the operations
@@ -102,32 +104,40 @@ public class ConfectioneryService {
      *
      * @param email    The email of the admin.
      * @param password The password of the admin.
-     * @return true if authentication is successful, false otherwise.
+     * @return true if authentication is successful, EntityNotFound otherwise
      */
 
-    public boolean authenticateAdmin(String email, String password) {
+
+
+    public boolean authenticateAdmin(String email, String password) throws EntityNotFoundException {
         Admin administrator = (Admin) users.getAll().stream().filter(user -> user instanceof Admin && (((Admin) user).getEmail().equals(email) && ((Admin) user).getPassword().equals(password))).findFirst().orElse(null);
-        if (administrator != null) {
-            loggedInUser = administrator;
-            return true;
+        if (administrator == null) {
+            throw new EntityNotFoundException("Client with username '" + administrator + "' not found.");
         }
-        return false;
+        loggedInUser = administrator;
+        return true;
     }
 
     /**
      * Authenticates a client based on the username
      *
      * @param username The username of the client
-     * @return true if authentication is successful, false otherwise.
+     * @return true if authentication is successful, EntityNotFound.
      */
 
-    public boolean authenticateClient(String username) {
-        Client client = (Client) users.getAll().stream().filter(user -> user instanceof Client && ((Client) user).getUsername().equals(username)).findFirst().orElse(null);
-        if (client != null) {
-            loggedInUser = client;
-            return true;
+
+    public boolean authenticateClient(String username) throws EntityNotFoundException {
+        Client client = (Client) users.getAll().stream()
+                .filter(user -> user instanceof Client && ((Client) user).getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+
+        if (client == null) {
+            throw new EntityNotFoundException("Client with username '" + username + "' not found.");
         }
-        return false;
+
+        loggedInUser = client;
+        return true;
     }
 
     /**
@@ -138,26 +148,7 @@ public class ConfectioneryService {
      * @return true if the order is successfully placed, false if no products were selected.
      */
 
-//    public boolean placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
-//        List<Product> products = new ArrayList<>();
-//        Order order = new Order(products, orderIdCounter++, LocalDate.now());
-//
-//        for (int cakeId : cakeIds) {
-//            if (menu.get(cakeId) != null) order.addProduct(menu.get(cakeId));
-//        }
-//
-//        for (int drinkId : drinkIds) {
-//            if (drink.get(drinkId) != null) order.addProduct(drink.get(drinkId));
-//        }
-//
-//        if (order.getProducts().isEmpty()) return false;
-//
-//        orderRepository.create(order); // Add the Order in the Repository
-//
-//        ((Client) loggedInUser).placeOrder(order); // Add Order internally in the current Client
-//        return true;
-//
-//    }
+
 
     public boolean placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
         List<Product> products = new ArrayList<>();
@@ -180,16 +171,8 @@ public class ConfectioneryService {
         return true;
     }
 
-    /**
-     * Deletes an order by ID from both the order repository and the client's order list.
-     *
-     * @param id The ID of the order to be deleted.
-     */
 
-    public void deleteOrder(int id) {
-        orderRepository.delete(id); // Remove from the repo
-        ((Client) loggedInUser).deleteById(id); // And from the client
-    }
+
 
     /**
      * change the ponts from a product

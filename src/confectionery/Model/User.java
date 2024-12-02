@@ -39,7 +39,9 @@ public abstract class User implements HasID, Serializable {
     public String getAddress() {
         return address;
     }
-
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public abstract String toString();
 

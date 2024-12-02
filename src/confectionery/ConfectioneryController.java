@@ -1,5 +1,6 @@
 package confectionery;
 
+import confectionery.Exception.EntityNotFoundException;
 import confectionery.Model.*;
 
 import java.util.ArrayList;
@@ -58,35 +59,46 @@ public class ConfectioneryController {
     /**
      * Authenticates the admin based on email and password.
      * @param scanner The scanner object to capture user input.
-     * @return true if login is successful, false otherwise.
+     * @return true if login is successful, exceptio otherwise.
      */
+
 
     public boolean loginAdmin(Scanner scanner) {
         System.out.print("Enter email:");
         String email = scanner.nextLine();
         System.out.print("Enter password:");
         String password = scanner.nextLine();
+        try{
         if (confectioneryService.authenticateAdmin(email, password)) {
             System.out.println("You have logged in as administrator!");
             return true;
         }
-        System.out.println("Wrong email or password!");
+        }
+        catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
         return false;
     }
 
     /**
      * Authenticates the client based on username
      * @param scanner The scanner object to capture user input.
-     * @return true if login is successful, false otherwise.
+     * @return true if login is successful, exception
      */
     public boolean loginClient(Scanner scanner) {
-        System.out.print("Enter username:");
+        System.out.print("Enter username: ");
         String username = scanner.nextLine();
-        if (confectioneryService.authenticateClient(username)) {
-            System.out.println("You have logged in as a client!");
-            return true;
+
+        try {
+            if (confectioneryService.authenticateClient(username)) {
+                System.out.println("You have logged in as a client!");
+                return true;
+            }
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        System.out.println("Failed to log in!");
+
         return false;
     }
 
@@ -193,6 +205,7 @@ public class ConfectioneryController {
      * @param scanner The scanner object to capture user input.
      */
 
+
     public void placeOrder(Scanner scanner) {
         System.out.println("Enter the IDs of cakes you want to order separated by space:");
         String cakeIdsInput = scanner.nextLine();
@@ -206,8 +219,6 @@ public class ConfectioneryController {
         else System.out.println("Failed to place order!.");
 
     }
-
-
 
 
     /**
