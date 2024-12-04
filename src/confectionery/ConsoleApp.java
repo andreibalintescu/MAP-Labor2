@@ -8,6 +8,10 @@ import java.util.function.Function;
 
 import confectionery.Exception.EntityNotFoundException;
 import confectionery.Model.*;
+import confectionery.Repository.DataBase.CakeDBRepository;
+import confectionery.Repository.DataBase.DrinkDBRepository;
+import confectionery.Repository.DataBase.OrderDBRepository;
+import confectionery.Repository.DataBase.UserDBRepository;
 import confectionery.Repository.FileRepository;
 import confectionery.Repository.InMemoryRepository;
 import confectionery.Repository.IRepository;
@@ -181,21 +185,31 @@ public class ConsoleApp {
 
         //filerepository
 
-        String cakeFilePath = "cakes.csv";
-        String drinkFilePath = "drinks.csv";
-        String userFilePath = "users.csv";
-        String orderFilePath = "orders.csv";
+//        String cakeFilePath = "cakes.csv";
+//        String drinkFilePath = "drinks.csv";
+//        String userFilePath = "users.csv";
+//        String orderFilePath = "orders.csv";
+//
+//
+//        IRepository<Cake> cakeRepo = new FileRepository<>(cakeFilePath);
+//        IRepository<Drink> drinkRepo = new FileRepository<>(drinkFilePath);
+//        IRepository<User> userRepo = new FileRepository<>(userFilePath);
+//        IRepository<Order> orderRepo = new FileRepository<>(orderFilePath);
+//
+//        intializeCakeRepository(cakeRepo);
+//        initializeDrinkRepository(drinkRepo);
+//        initializeUserRepository(userRepo);
+        
+    //databaserepository
 
+        String DB_URL = "jdbc:sqlite:C:/Users/Denisa/JavaProjects/LAB2MAP/src/confectionery.db";
+        String DB_USER = "user";
+        String DB_PASSWORD = "password";
 
-        IRepository<Cake> cakeRepo = new FileRepository<>(cakeFilePath);
-        IRepository<Drink> drinkRepo = new FileRepository<>(drinkFilePath);
-        IRepository<User> userRepo = new FileRepository<>(userFilePath);
-        IRepository<Order> orderRepo = new FileRepository<>(orderFilePath);
-
-        intializeCakeRepository(cakeRepo);
-        initializeDrinkRepository(drinkRepo);
-        initializeUserRepository(userRepo);
-
+        IRepository<Cake> cakeRepo = new CakeDBRepository(DB_URL, DB_USER, DB_PASSWORD);
+        IRepository<Drink> drinkRepo = new DrinkDBRepository(DB_URL, DB_USER, DB_PASSWORD);
+        IRepository<User> userRepo = new UserDBRepository(DB_URL, DB_USER, DB_PASSWORD);
+       IRepository<Order> orderRepo = new OrderDBRepository(DB_URL, DB_USER, DB_PASSWORD);
 
         ConfectioneryService confectioneryService = new ConfectioneryService(cakeRepo, drinkRepo, orderRepo, userRepo);
         ConfectioneryController confectioneryController = new ConfectioneryController(confectioneryService);

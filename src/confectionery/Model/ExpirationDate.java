@@ -59,16 +59,31 @@ public class ExpirationDate implements Serializable {
      * @return an ExpirationDate object
      * @throws IllegalArgumentException if the format is invalid
      */
+//    public static ExpirationDate parse(String dateStr) {
+//        try {
+//            String[] parts = dateStr.split("-");
+//            int year = Integer.parseInt(parts[0]);
+//            Month month = Month.valueOf(parts[1]);
+//            Day day = Day.valueOf(parts[2]);
+//
+//            return new ExpirationDate(year, month, day);
+//        } catch (Exception e) {
+//            throw new IllegalArgumentException("Invalid date format: " + dateStr, e);
+//        }
+//
+//    }
     public static ExpirationDate parse(String dateStr) {
         try {
             String[] parts = dateStr.split("-");
             int year = Integer.parseInt(parts[0]);
-            Month month = Month.valueOf(parts[1]);
-            Day day = Day.valueOf(parts[2]);
-
+            int monthInt = Integer.parseInt(parts[1]);
+            Month month = Month.values()[monthInt - 1];
+            int dayInt = Integer.parseInt(parts[2]);
+            Day day = Day.values()[dayInt - 1];
             return new ExpirationDate(year, month, day);
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid date format: " + dateStr, e);
         }
     }
+
 }
