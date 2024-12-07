@@ -14,7 +14,6 @@ public class UserDBRepository extends DBRepository<User> {
         super(dbUrl, dbUser, dbPassword);
         Client();
         Admin();
-
     }
 
     private void Client() {
@@ -49,6 +48,7 @@ public class UserDBRepository extends DBRepository<User> {
             throw new RuntimeException("Error creating Admin table", e);
         }
     }
+
 
     @Override
     public void create(User user) {

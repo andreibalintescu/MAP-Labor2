@@ -3,6 +3,8 @@ package confectionery;
 import confectionery.Exception.EntityNotFoundException;
 import confectionery.Model.*;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -54,6 +56,71 @@ public class ConfectioneryController {
             confectioneryService.createClient(name, address, id);
             System.out.println("Client account created successfully!");
         } else System.out.println("Choose one of the provided roles!");
+    }
+
+    /**
+     * Prompts the admin to create a product of their choice.
+     * @param scanner
+     */
+    public void createProduct(Scanner scanner) {
+        System.out.print("Choose type of product: Drink or Cake \n");
+        String type = scanner.nextLine();
+        if (type.equals("Drink")) {
+            System.out.print("Enter drink name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter drink price: ");
+            double price = scanner.nextDouble();
+            System.out.print("Enter drink weight: ");
+            double weight = scanner.nextDouble();
+            System.out.print("Enter drink points: ");
+            int points = scanner.nextInt();
+            System.out.print("Enter drink alcohol percentage: ");
+            double alcoholPercentage = scanner.nextDouble();
+            // Calculate expiration date (2 weeks from today)
+            LocalDate today = LocalDate.now();
+            LocalDate expirationDateLocal = today.plusWeeks(2);
+
+            // Map LocalDate components to ExpirationDate
+            int year = expirationDateLocal.getYear();
+            Month month = Month.values()[expirationDateLocal.getMonthValue() - 1];
+            Day day = Day.values()[expirationDateLocal.getDayOfMonth() - 1];
+
+            ExpirationDate expirationDate = new ExpirationDate(year, month, day);
+
+            int id = generateId();
+            if(confectioneryService.createDrink(id, name, price, weight, expirationDate, points, alcoholPercentage))
+                System.out.println("Drink added to the menu!");
+            else
+                System.out.println("Failed to add drink to the menu!");
+        }
+        else if (type.equals("Cake")) {
+            System.out.print("Enter cake name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter cake price: ");
+            double price = scanner.nextDouble();
+            System.out.print("Enter cake weight: ");
+            double weight = scanner.nextDouble();
+            System.out.print("Enter cake points: ");
+            int points = scanner.nextInt();
+            System.out.print("Enter cake calories: ");
+            int calories = scanner.nextInt();
+            // Calculate expiration date (1 week from today)
+            LocalDate today = LocalDate.now();
+            LocalDate expirationDateLocal = today.plusWeeks(1);
+
+            // Map LocalDate components to ExpirationDate
+            int year = expirationDateLocal.getYear();
+            Month month = Month.values()[expirationDateLocal.getMonthValue() - 1];
+            Day day = Day.values()[expirationDateLocal.getDayOfMonth() - 1];
+
+            ExpirationDate expirationDate = new ExpirationDate(year, month, day);
+
+            int id = generateId();
+            if(confectioneryService.createCake(id, name, price, weight, expirationDate, points, calories))
+                System.out.println("Cake added to the menu!");
+            else
+                System.out.println("Failed to add cake to the menu!");
+        }
     }
 
     /**
@@ -304,7 +371,7 @@ public class ConfectioneryController {
      */
 
     private int generateId() {
-        return (int) (Math.random() * 1000);
+        return (int) (Math.random() * 10000);
     }
 
 
@@ -335,5 +402,15 @@ public class ConfectioneryController {
             System.out.println("User deleted successfully!");
         else
             System.out.println("Failed to delete user!");
+    }
+
+
+    public void deleteProduct(Scanner scanner) {
+        System.out.println("Enter the id of the product you want to delete from the menu:");
+        Integer id = Integer.parseInt(scanner.nextLine());
+        if(confectioneryService.deleteProduct(id))
+            System.out.println("Product deleted successfully!");
+        else
+            System.out.println("Failed to delete product!");
     }
 }

@@ -18,7 +18,9 @@ public class OrderDBRepository extends DBRepository<Order> {
         cakeRepo = new CakeDBRepository(dbUrl, dbUser, dbPassword);
         drinkRepo = new DrinkDBRepository(dbUrl, dbUser, dbPassword);
         createTableIfNotExists();
-        createOrderProducts();
+        createOrderedDrinks();
+        createOrderedCakes();
+        createClientOrdersTable();
     }
 
     private void createTableIfNotExists() {
@@ -36,13 +38,49 @@ public class OrderDBRepository extends DBRepository<Order> {
         }
     }
 
-    private void createOrderProducts() {
+    private void createOrderedDrinks() {
         String sql = """
-        CREATE TABLE IF NOT EXISTS OrderProducts (
+        CREATE TABLE IF NOT EXISTS OrderedDrinks (
             orderID INT,
-            productID INT,
-            productType VARCHAR(255),
-            PRIMARY KEY (orderID, productID),
+            drinkID INT,
+            PRIMARY KEY (orderID, drinkID),
+            FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE,
+            FOREIGN KEY (drinkID) REFERENCES Drinks(drinkID) ON DELETE CASCADE
+        );
+    """;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error creating OrderedDrinks table", e);
+        }
+    }
+
+    private void createOrderedCakes() {
+        String sql = """
+        CREATE TABLE IF NOT EXISTS OrderedCakes (
+            orderID INT,
+            cakeID INT,
+            PRIMARY KEY (orderID, cakeID),
+            FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE,
+            FOREIGN KEY (cakeID) REFERENCES Cakes(cakeID) ON DELETE CASCADE
+        );
+    """;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error creating OrderedCakes table", e);
+        }
+    }
+
+    private void createClientOrdersTable() {
+        String sql = """
+        CREATE TABLE IF NOT EXISTS ClientOrders (
+            clientID INT,
+            orderID INT,
+            PRIMARY KEY (clientID, orderID),
+            FOREIGN KEY (clientID) REFERENCES Client(ID) ON DELETE CASCADE,
             FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE
         );
     """;
@@ -50,9 +88,22 @@ public class OrderDBRepository extends DBRepository<Order> {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.execute();
         } catch (SQLException e) {
-            throw new RuntimeException("Error creating OrderProducts table", e);
+            throw new RuntimeException("Error creating ClientOrders table", e);
         }
     }
+
+    public void addClientOrder(int clientID, int orderID) {
+        String sql = "INSERT INTO ClientOrders (clientID, orderID) VALUES (?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, clientID);
+            statement.setInt(2, orderID);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error adding client-order relationship", e);
+        }
+    }
+
     @Override
     public void create(Order order) {
         String sql = "INSERT INTO Orders (orderID, date) VALUES (?, ?)";
@@ -62,17 +113,6 @@ public class OrderDBRepository extends DBRepository<Order> {
             statement.setDate(2, Date.valueOf(order.getDate()));
 
             statement.executeUpdate();
-
-
-            String insertProductSql = "INSERT INTO OrderProducts (orderID, productID, productType) VALUES (?, ?, ?)";
-            try (PreparedStatement productStatement = connection.prepareStatement(insertProductSql)) {
-                for (Product product : order.getProducts()) {
-                    productStatement.setInt(1, order.getID());
-                    productStatement.setInt(2, product.getID());
-                    productStatement.setString(3, product.getClass().getSimpleName());
-                    productStatement.executeUpdate();
-                }
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -85,19 +125,40 @@ public class OrderDBRepository extends DBRepository<Order> {
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM Orders WHERE orderID = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        // Delete from ClientOrders
+        String deleteClientOrderSql = "DELETE FROM ClientOrders WHERE orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteClientOrderSql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
-
-
-            String deleteProductsSql = "DELETE FROM OrderProducts WHERE orderID = ?";
-            try (PreparedStatement deleteStatement = connection.prepareStatement(deleteProductsSql)) {
-                deleteStatement.setInt(1, id);
-                deleteStatement.executeUpdate();
-            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error deleting client-order relationship", e);
+        }
+
+        // Delete from OrderedDrinks
+        String deleteOrderedDrinksSql = "DELETE FROM OrderedDrinks WHERE orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteOrderedDrinksSql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting ordered drinks", e);
+        }
+
+        // Delete from OrderedCakes
+        String deleteOrderedCakesSql = "DELETE FROM OrderedCakes WHERE orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteOrderedCakesSql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting ordered cakes", e);
+        }
+
+        // Finally, delete from Orders
+        String deleteOrderSql = "DELETE FROM Orders WHERE orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteOrderSql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting order", e);
         }
     }
 
@@ -123,27 +184,34 @@ public class OrderDBRepository extends DBRepository<Order> {
 
     private List<Product> getProductsForOrder(int orderID) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM OrderProducts WHERE orderID = ?";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        // Query OrderedCakes
+        String sqlCakes = "SELECT c.* FROM OrderedCakes oc INNER JOIN Cakes c ON oc.cakeID = c.cakeID WHERE oc.orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sqlCakes)) {
             statement.setInt(1, orderID);
             ResultSet resultSet = statement.executeQuery();
-
             while (resultSet.next()) {
-                int productID = resultSet.getInt("productID");
-                String productType = resultSet.getString("productType");
-
-                if ("Cake".equalsIgnoreCase(productType)) {
-                    products.add(cakeRepo.get(productID));
-                } else if ("Drink".equalsIgnoreCase(productType)) {
-                    products.add(drinkRepo.get(productID));
-                }
+                products.add(cakeRepo.get(resultSet.getInt("cakeID")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        // Query OrderedDrinks
+        String sqlDrinks = "SELECT d.* FROM OrderedDrinks od INNER JOIN Drinks d ON od.drinkID = d.drinkID WHERE od.orderID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sqlDrinks)) {
+            statement.setInt(1, orderID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                products.add(drinkRepo.get(resultSet.getInt("drinkID")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         return products;
     }
+
 
     @Override
     public Order get(Integer id) {

@@ -75,15 +75,21 @@ public class ExpirationDate implements Serializable {
     public static ExpirationDate parse(String dateStr) {
         try {
             String[] parts = dateStr.split("-");
+
+            // Parse the year as an integer
             int year = Integer.parseInt(parts[0]);
-            int monthInt = Integer.parseInt(parts[1]);
-            Month month = Month.values()[monthInt - 1];
-            int dayInt = Integer.parseInt(parts[2]);
-            Day day = Day.values()[dayInt - 1];
+
+            // Parse the month by matching the written name (e.g., "December")
+            Month month = Month.valueOf(parts[1]);
+
+            // Parse the day by matching the ordinal name (e.g., "Fourteenth")
+            Day day = Day.valueOf(parts[2]);
+
             return new ExpirationDate(year, month, day);
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid date format: " + dateStr, e);
         }
     }
+
 
 }

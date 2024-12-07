@@ -137,8 +137,10 @@ public class ConsoleApp {
                     5. View Profile
                     6. View Client with the most Points
                     7. Change Password
-                    8. Update Products
-                    9. Delete User
+                    8. Create Product
+                    9. Update Product
+                    10. Delete Product
+                    11. Delete User
                     0. Logout
                     Please select an option:
                     """);
@@ -146,7 +148,7 @@ public class ConsoleApp {
                 String option = scanner.nextLine().trim();
 
 
-                if (!isValidOption(option, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0")) {
+                if (!isValidOption(option, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "0")) {
                     throw new ValidationException("Invalid option. Please select a valid option.");
                 }
 
@@ -158,8 +160,10 @@ public class ConsoleApp {
                     case "5" -> confectioneryController.getProfile();
                     case "6" -> confectioneryController.viewMostPoints();
                     case "7" -> confectioneryController.changePassword(scanner);
-                    case "8" -> confectioneryController.updateProduct(scanner);
-                    case "9" -> confectioneryController.deleteUser(scanner);
+                    case "8" -> confectioneryController.createProduct(scanner);
+                    case "9" -> confectioneryController.updateProduct(scanner);
+                    case "10" -> confectioneryController.deleteProduct(scanner);
+                    case "11" -> confectioneryController.deleteUser(scanner);
                     case "0" -> adminRunning = false;
                 }
             } catch (ValidationException e) {

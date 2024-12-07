@@ -19,8 +19,8 @@ public class CakeDBRepository extends DBRepository<Cake> {
     }
     private void createTableIfNotExists() {
         String sql = """
-            CREATE TABLE IF NOT EXISTS Cake (
-                ID INT PRIMARY KEY,
+            CREATE TABLE IF NOT EXISTS Cakes (
+                cakeID INT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 price DOUBLE NOT NULL,
                 weight DOUBLE NOT NULL,
@@ -38,7 +38,7 @@ public class CakeDBRepository extends DBRepository<Cake> {
     }
     @Override
     public void create(Cake obj) {
-        String sql = "INSERT INTO Cake (ID, name, price, weight, expirationDate, points, calories) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Cakes (cakeID, name, price, weight, expirationDate, points, calories) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, obj.getID());
@@ -58,7 +58,7 @@ public class CakeDBRepository extends DBRepository<Cake> {
 
     @Override
     public void update(Cake obj) {
-        String sql = "UPDATE Cake SET name = ?, price = ?, weight = ?, expirationDate = ?, points = ?, calories = ? WHERE ID = ?";
+        String sql = "UPDATE Cakes SET name = ?, price = ?, weight = ?, expirationDate = ?, points = ?, calories = ? WHERE cakeID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, obj.getName());
@@ -77,7 +77,7 @@ public class CakeDBRepository extends DBRepository<Cake> {
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM Cake WHERE ID = ?";
+        String sql = "DELETE FROM Cakes WHERE cakeID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -89,7 +89,7 @@ public class CakeDBRepository extends DBRepository<Cake> {
 
     @Override
     public List<Cake> getAll() {
-        String sql = "SELECT * FROM Cake";
+        String sql = "SELECT * FROM Cakes";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
@@ -106,7 +106,7 @@ public class CakeDBRepository extends DBRepository<Cake> {
     }
     @Override
     public Cake get(Integer id) {
-        String sql = "SELECT * FROM Cake WHERE ID = ?";
+        String sql = "SELECT * FROM Cakes WHERE cakeID = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -130,7 +130,7 @@ public class CakeDBRepository extends DBRepository<Cake> {
      * @throws SQLException if there is an issue with the result set
      */
     public static Cake extractFromResultSet(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("ID");
+        int id = resultSet.getInt("cakeID");
         String name = resultSet.getString("name");
         double price = resultSet.getDouble("price");
         double weight = resultSet.getDouble("weight");

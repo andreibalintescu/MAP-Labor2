@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import confectionery.Exception.BusinessLogicException;
 import confectionery.Model.*;
 import confectionery.Repository.IRepository;
 import confectionery.Exception.EntityNotFoundException;
@@ -19,22 +18,22 @@ import confectionery.Exception.EntityNotFoundException;
  */
 public class ConfectioneryService {
 
-    private final IRepository<Cake> menu;
-    private final IRepository<Drink> drink;
+    private final IRepository<Cake> cakes;
+    private final IRepository<Drink> drinks;
     private final IRepository<Order> orderRepository;
     private final IRepository<User> users;
     private int orderIdCounter = 1;
     private User loggedInUser;
 
     /**
-     * @param menu            The repository of cakes
-     * @param drink           The repository of drinks
+     * @param cakes            The repository of cakes
+     * @param drinks           The repository of drinks
      * @param orderRepository The repository of the stored orders
      * @param users           The repository of all users
      */
-    public ConfectioneryService(IRepository<Cake> menu, IRepository<Drink> drink, IRepository<Order> orderRepository, IRepository<User> users) {
-        this.menu = menu;
-        this.drink = drink;
+    public ConfectioneryService(IRepository<Cake> cakes, IRepository<Drink> drinks, IRepository<Order> orderRepository, IRepository<User> users) {
+        this.cakes = cakes;
+        this.drinks = drinks;
         this.orderRepository = orderRepository;
         this.users = users;
     }
@@ -49,7 +48,7 @@ public class ConfectioneryService {
      * @return the available cakes
      */
     public List<Cake> getCakes() {
-        return menu.getAll();
+        return cakes.getAll();
     }
 
     /**
@@ -59,7 +58,7 @@ public class ConfectioneryService {
      */
 
     public List<Drink> getDrinks() {
-        return drink.getAll();
+        return drinks.getAll();
     }
 
     /**
@@ -89,6 +88,26 @@ public class ConfectioneryService {
 
     }
 
+    public boolean createDrink(int id, String name, double price, double weight, ExpirationDate expirationDate, int points, double alcoholPercentage) {
+        Drink drink = new Drink(id, name, price, weight, expirationDate, points, alcoholPercentage);
+        if(drinks.getAll().stream().anyMatch(d -> d.getName().equals(name)))
+            return false;
+        else
+        {
+            drinks.create(drink);
+            return true;
+        }
+    }
+
+    public boolean createCake(int id, String name, double price, double weight, ExpirationDate expirationDate, int points, int calories) {
+        Cake cake = new Cake(id, name, price, weight, expirationDate, points, calories);
+        if(cakes.getAll().stream().anyMatch(c -> c.getName().equals(name)))
+            return false;
+        else {
+            cakes.create(cake);
+            return true;
+        }
+    }
     /**
      * @param name    The name of the client
      * @param address The adress of the client
@@ -155,11 +174,11 @@ public class ConfectioneryService {
         Order order = new Order(products, orderIdCounter++, LocalDate.now());
 
         for (int cakeId : cakeIds) {
-            if (menu.get(cakeId) != null) order.addProduct(menu.get(cakeId));
+            if (cakes.get(cakeId) != null) order.addProduct(cakes.get(cakeId));
         }
 
         for (int drinkId : drinkIds) {
-            if (drink.get(drinkId) != null) order.addProduct(drink.get(drinkId));
+            if (drinks.get(drinkId) != null) order.addProduct(drinks.get(drinkId));
         }
 
         if (order.getProducts().isEmpty()) return false;
@@ -180,8 +199,8 @@ public class ConfectioneryService {
      * @param id the id from the product
      */
     public void productUpdate(int id) {
-        Cake cake = menu.get(id);
-        Drink drink1 = drink.get(id);
+        Cake cake = cakes.get(id);
+        Drink drink1 = drinks.get(id);
         if (cake != null) {
 
             Scanner scanner = new Scanner(System.in);
@@ -192,7 +211,7 @@ public class ConfectioneryService {
                 int newPoint = Integer.parseInt(newPoints);
                 cake.setPoints(newPoint);
             }
-            menu.update(cake);
+            cakes.update(cake);
             System.out.println("Product updated successfully!");
         } else if (drink1 != null) {
             Scanner scanner = new Scanner(System.in);
@@ -203,7 +222,7 @@ public class ConfectioneryService {
                 int newPoint = Integer.parseInt(newPoints);
                 drink1.setPoints(newPoint);
             }
-            drink.update(drink1);
+            drinks.update(drink1);
             System.out.println("Product updated successfully!");
         } else
             System.out.println("Product with ID " + id + " not found.");
@@ -307,4 +326,20 @@ public class ConfectioneryService {
     }
 
 
+    public boolean deleteProduct(Integer id) {
+        if (cakes.get(id) == null && drinks.get(id) == null) {
+            return false;
+        }
+        else {
+            if(cakes.get(id) != null) {
+                cakes.delete(id);
+                return true;
+            }
+            if(drinks.get(id) != null) {
+                drinks.delete(id);
+                return true;
+            }
+        }
+        return false;
+    }
 }

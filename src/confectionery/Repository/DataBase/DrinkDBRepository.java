@@ -18,8 +18,8 @@ public class DrinkDBRepository extends DBRepository<Drink> {
 
     private void createTableIfNotExists() {
         String sql = """
-            CREATE TABLE IF NOT EXISTS Drink (
-                ID INT PRIMARY KEY,
+            CREATE TABLE IF NOT EXISTS Drinks (
+                drinkID INT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 price DOUBLE NOT NULL,
                 weight DOUBLE NOT NULL,
@@ -38,7 +38,7 @@ public class DrinkDBRepository extends DBRepository<Drink> {
 
     @Override
     public void create(Drink obj) {
-        String sql = "INSERT INTO Drink (ID, name, price, weight, expirationDate, points, alcohol) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Drinks (drinkID, name, price, weight, expirationDate, points, alcohol) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, obj.getID());
@@ -59,7 +59,7 @@ public class DrinkDBRepository extends DBRepository<Drink> {
 
     @Override
     public void update(Drink obj) {
-        String sql = "UPDATE Drink SET name = ?, price = ?, weight = ?, expirationDate = ?, points = ?, alcohol = ? WHERE ID = ?";
+        String sql = "UPDATE Drinks SET name = ?, price = ?, weight = ?, expirationDate = ?, points = ?, alcohol = ? WHERE drinkID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, obj.getName());
@@ -78,7 +78,7 @@ public class DrinkDBRepository extends DBRepository<Drink> {
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM Drink WHERE ID = ?";
+        String sql = "DELETE FROM Drinks WHERE drinkID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -90,7 +90,7 @@ public class DrinkDBRepository extends DBRepository<Drink> {
 
     @Override
     public List<Drink> getAll() {
-        String sql = "SELECT * FROM Drink";
+        String sql = "SELECT * FROM Drinks";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
@@ -109,7 +109,7 @@ public class DrinkDBRepository extends DBRepository<Drink> {
 
     @Override
     public Drink get(Integer id) {
-        String sql = "SELECT * FROM Drink WHERE ID = ?";
+        String sql = "SELECT * FROM Drinks WHERE drinkID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -127,7 +127,7 @@ public class DrinkDBRepository extends DBRepository<Drink> {
 
 
     public static Drink extractFromResultSet(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("ID");
+        int id = resultSet.getInt("drinkID");
         String name = resultSet.getString("name");
         double price = resultSet.getDouble("price");
         double weight = resultSet.getDouble("weight");
