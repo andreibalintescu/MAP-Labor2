@@ -14,10 +14,14 @@ public abstract class DBRepository<T extends HasID> implements IRepository<T>, A
 
     public DBRepository(String dbUrl, String dbUser, String dbPassword) {
         try {
+            Class.forName("org.sqlite.JDBC");
+
             connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         } catch (SQLException e) {
               throw new RuntimeException(e);
 
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,5 +1,6 @@
 package confectionery;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -202,9 +203,10 @@ public class ConsoleApp {
         
     //databaserepository
 
-        String DB_URL = "jdbc:sqlite:C:/Users/Denisa/JavaProjects/LAB2MAP/src/confectionery.db";
+        String DB_URL = "jdbc:sqlite:src/confectionery.db";
         String DB_USER = "user";
         String DB_PASSWORD = "password";
+        System.out.println(new File("src/confectionery.db").getAbsolutePath());
 
         IRepository<Cake> cakeRepo = new CakeDBRepository(DB_URL, DB_USER, DB_PASSWORD);
         IRepository<Drink> drinkRepo = new DrinkDBRepository(DB_URL, DB_USER, DB_PASSWORD);
