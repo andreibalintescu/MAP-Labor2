@@ -8,7 +8,7 @@
     <content url="jar://$USER_HOME$/Downloads/postgresql-42.2.28.jre7.jar!/" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library name="JUnit4">
         <CLASSES>
           <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13.1/junit-4.13.1.jar!/" />
@@ -18,7 +18,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library name="JUnit5.8.1">
         <CLASSES>
           <root url="jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter/5.8.1/junit-jupiter-5.8.1.jar!/" />
@@ -34,6 +34,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="xerial.sqlite.jdbc" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.xerial:sqlite-jdbc:3.47.1.0" level="project" />
   </component>
 </module>
