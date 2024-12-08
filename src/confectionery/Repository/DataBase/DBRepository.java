@@ -2,6 +2,7 @@ package confectionery.Repository.DataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import confectionery.Model.HasID;
@@ -25,4 +26,17 @@ public abstract class DBRepository<T extends HasID> implements IRepository<T>, A
     public void close() throws Exception {
         connection.close();
     }
+
+    @Override
+    public void associateOrderWithClient(int orderId, int clientId) {
+        String sql = "UPDATE Orders SET clientID = ? WHERE orderID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, clientId);
+            stmt.setInt(2, orderId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error associating order with client", e);
+        }
+    }
+
 }

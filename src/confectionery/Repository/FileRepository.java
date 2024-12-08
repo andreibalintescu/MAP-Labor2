@@ -3,6 +3,7 @@ package confectionery.Repository;
 
 
 import confectionery.Model.HasID;
+import confectionery.Model.Order;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -111,4 +112,16 @@ public class FileRepository<T extends HasID> implements IRepository<T> {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void associateOrderWithClient(int orderId, int clientId) {
+        doInFile(data -> {
+            Order order = (Order) data.get(orderId); // Assuming you cast appropriately
+            if (order != null) {
+                order.setClientID(clientId); // Update association in memory
+                data.put(orderId, (T) order); // Save updated order back to file
+            }
+        });
+    }
+
 }

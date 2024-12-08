@@ -121,6 +121,7 @@ public class ConfectioneryController {
             else
                 System.out.println("Failed to add cake to the menu!");
         }
+        else System.out.println("Invalid option!");
     }
 
     /**

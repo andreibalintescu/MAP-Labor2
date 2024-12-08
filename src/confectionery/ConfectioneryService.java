@@ -20,21 +20,20 @@ public class ConfectioneryService {
 
     private final IRepository<Cake> cakes;
     private final IRepository<Drink> drinks;
-    private final IRepository<Order> orderRepository;
+    private final IRepository<Order> orders;
     private final IRepository<User> users;
-    private int orderIdCounter = 1;
     private User loggedInUser;
 
     /**
      * @param cakes            The repository of cakes
      * @param drinks           The repository of drinks
-     * @param orderRepository The repository of the stored orders
+     * @param orders The repository of the stored orders
      * @param users           The repository of all users
      */
-    public ConfectioneryService(IRepository<Cake> cakes, IRepository<Drink> drinks, IRepository<Order> orderRepository, IRepository<User> users) {
+    public ConfectioneryService(IRepository<Cake> cakes, IRepository<Drink> drinks, IRepository<Order> orders, IRepository<User> users) {
         this.cakes = cakes;
         this.drinks = drinks;
-        this.orderRepository = orderRepository;
+        this.orders = orders;
         this.users = users;
     }
 
@@ -167,29 +166,43 @@ public class ConfectioneryService {
      * @return true if the order is successfully placed, false if no products were selected.
      */
 
-
-
     public boolean placeOrder(List<Integer> cakeIds, List<Integer> drinkIds) {
+        if (!(loggedInUser instanceof Client)) {
+            throw new IllegalStateException("Only clients can place orders.");
+        }
+
         List<Product> products = new ArrayList<>();
-        Order order = new Order(products, orderIdCounter++, LocalDate.now());
-
         for (int cakeId : cakeIds) {
-            if (cakes.get(cakeId) != null) order.addProduct(cakes.get(cakeId));
+            Cake cake = cakes.get(cakeId);
+            if (cake != null) {
+                products.add(cake);
+            }
         }
-
         for (int drinkId : drinkIds) {
-            if (drinks.get(drinkId) != null) order.addProduct(drinks.get(drinkId));
+            Drink drink = drinks.get(drinkId);
+            if (drink != null) {
+                products.add(drink);
+            }
         }
 
-        if (order.getProducts().isEmpty()) return false;
+        if (products.isEmpty()) {
+            return false;
+        }
 
-        orderRepository.create(order);
+        int id = generateOrderId();
+
+        // Create the order
+        Order order = new Order(products, id, LocalDate.now());
+        orders.create(order);
+
+        // Link the order to the client via the repository
+        orders.associateOrderWithClient(order.getID(), loggedInUser.getID());
+
+        // Update the in-memory client
         ((Client) loggedInUser).placeOrder(order);
 
-        users.update(loggedInUser);
         return true;
     }
-
 
 
 
@@ -241,8 +254,8 @@ public class ConfectioneryService {
      */
     public float getBalanceTotal() {
         Balance balance = new Balance();
-        balance.addOrders(orderRepository.getAll());
-        for (Order order : orderRepository.getAll()) {
+        balance.addOrders(orders.getAll());
+        for (Order order : orders.getAll()) {
             System.out.println("Order" + order.getID() + ": " + order.getTotal());
         }
         return balance.calculateTotalBalance();
@@ -255,7 +268,7 @@ public class ConfectioneryService {
      * @param month The month for which the balance should be calculated.
      */
     public void getMonthlyBalance(int month) {
-        double monthlyBalance = orderRepository.getAll().stream().filter(order -> order.getDate().getMonth() == Month.of(month)).mapToDouble(Order::getTotal).sum();
+        double monthlyBalance = orders.getAll().stream().filter(order -> order.getDate().getMonth() == Month.of(month)).mapToDouble(Order::getTotal).sum();
         System.out.println("Monthly balance for month " + month + " of the current year: " + monthlyBalance + " lei");
     }
 
@@ -265,7 +278,7 @@ public class ConfectioneryService {
      * @param year The year for which the balance should be calculated.
      */
     public void getYearlyBalance(int year) {
-        double yearlyBalance = orderRepository.getAll().stream().filter(order -> order.getDate().getYear() == year).mapToDouble(Order::getTotal).sum();
+        double yearlyBalance = orders.getAll().stream().filter(order -> order.getDate().getYear() == year).mapToDouble(Order::getTotal).sum();
         System.out.println("Yearly balance for year " + year + ": " + yearlyBalance + " lei");
     }
 
@@ -313,7 +326,7 @@ public class ConfectioneryService {
 
     /**
      *
-     * @param id the id of the user tht is going to be deleted
+     * @param id the id of the user that is going to be deleted
      * @return true if the user is deleted
      */
 
@@ -325,7 +338,11 @@ public class ConfectioneryService {
         }
     }
 
-
+    /**
+     *
+     * @param id the id of the product to be deleted
+     * @return true if the product is deleted, false otherwise
+     */
     public boolean deleteProduct(Integer id) {
         if (cakes.get(id) == null && drinks.get(id) == null) {
             return false;
@@ -341,5 +358,9 @@ public class ConfectioneryService {
             }
         }
         return false;
+    }
+
+    private int generateOrderId() {
+        return (int) (Math.random() * 10000);
     }
 }

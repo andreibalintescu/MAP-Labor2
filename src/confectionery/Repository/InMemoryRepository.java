@@ -1,6 +1,7 @@
 package confectionery.Repository;
 
 import confectionery.Model.HasID;
+import confectionery.Model.Order;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,4 +54,12 @@ public class InMemoryRepository<T extends HasID> implements IRepository<T> {
     public List<T> getAll() {
         return data.values().stream().toList();
     }
+    @Override
+    public void associateOrderWithClient(int orderId, int clientId) {
+        Order order = (Order) data.get(orderId); // Assuming you cast appropriately
+        if (order != null) {
+            order.setClientID(clientId); // Update the in-memory association
+        }
+    }
+
 }

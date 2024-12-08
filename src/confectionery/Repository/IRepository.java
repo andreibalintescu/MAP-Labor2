@@ -45,4 +45,9 @@ public interface IRepository<T extends HasID> {
      * @return A list of all objects in the repository.
      */
     List<T> getAll();
+
+    default void associateOrderWithClient(int orderId, int clientId) {
+        throw new UnsupportedOperationException("This repository does not support order-client association.");
+    }
+
 }

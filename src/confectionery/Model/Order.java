@@ -15,6 +15,7 @@ public class Order implements HasID, Serializable {
     private final List<Product> products;
     private final Integer orderID;
     private final LocalDate date;
+    private int clientID; // New attribute only for testing
 
     /**
      * @param products A list of products included in the order.
@@ -25,6 +26,7 @@ public class Order implements HasID, Serializable {
         this.products = products;
         this.orderID = orderID;
         this.date = date;
+        this.clientID = -1; // Default value (e.g., unassigned client)
     }
 
 
@@ -108,5 +110,15 @@ public class Order implements HasID, Serializable {
         stringBuilder.append("Total: ").append(getTotal()).append("\n");
 
         return stringBuilder.toString();
+    }
+
+    // New getter for clientID
+    public int getClientID() {
+        return clientID;
+    }
+
+    // New setter for clientID
+    public void setClientID(int clientID) {
+        this.clientID = clientID;
     }
 }

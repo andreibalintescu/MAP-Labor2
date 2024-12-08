@@ -20,14 +20,15 @@ public class OrderDBRepository extends DBRepository<Order> {
         createTableIfNotExists();
         createOrderedDrinks();
         createOrderedCakes();
-        createClientOrdersTable();
     }
 
     private void createTableIfNotExists() {
         String sql = """
         CREATE TABLE IF NOT EXISTS Orders (
             orderID INT PRIMARY KEY,
-            date DATE
+            date DATE,
+            clientID INTEGER NOT NULL,
+            FOREIGN KEY (clientID) REFERENCES Clients(ID) ON DELETE CASCADE
         );
     """;
 
@@ -74,47 +75,41 @@ public class OrderDBRepository extends DBRepository<Order> {
         }
     }
 
-    private void createClientOrdersTable() {
-        String sql = """
-        CREATE TABLE IF NOT EXISTS ClientOrders (
-            clientID INT,
-            orderID INT,
-            PRIMARY KEY (clientID, orderID),
-            FOREIGN KEY (clientID) REFERENCES Client(ID) ON DELETE CASCADE,
-            FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE
-        );
-    """;
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error creating ClientOrders table", e);
-        }
-    }
-
-    public void addClientOrder(int clientID, int orderID) {
-        String sql = "INSERT INTO ClientOrders (clientID, orderID) VALUES (?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, clientID);
-            statement.setInt(2, orderID);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error adding client-order relationship", e);
-        }
-    }
-
     @Override
     public void create(Order order) {
-        String sql = "INSERT INTO Orders (orderID, date) VALUES (?, ?)";
+        String sqlOrder = "INSERT INTO Orders (orderID, date, clientID) VALUES (?, ?, ?)";
+        String sqlCakes = "INSERT INTO OrderedCakes (orderID, cakeID) VALUES (?, ?)";
+        String sqlDrinks = "INSERT INTO OrderedDrinks (orderID, drinkID) VALUES (?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, order.getID());
-            statement.setDate(2, Date.valueOf(order.getDate()));
+        try (PreparedStatement orderStatement = connection.prepareStatement(sqlOrder);
+             PreparedStatement cakesStatement = connection.prepareStatement(sqlCakes);
+             PreparedStatement drinksStatement = connection.prepareStatement(sqlDrinks)) {
 
-            statement.executeUpdate();
+            // Insert into Orders table
+            orderStatement.setInt(1, order.getID());
+            orderStatement.setString(2, order.getDate().toString());
+            orderStatement.setInt(3, order.getClientID());
+            orderStatement.executeUpdate();
+
+            // Insert into OrderedCakes and OrderedDrinks tables
+            for (Product product : order.getProducts()) {
+                if (product instanceof Cake) {
+                    cakesStatement.setInt(1, order.getID());
+                    cakesStatement.setInt(2, product.getID());
+                    cakesStatement.addBatch(); // Use batch for efficiency
+                } else if (product instanceof Drink) {
+                    drinksStatement.setInt(1, order.getID());
+                    drinksStatement.setInt(2, product.getID());
+                    drinksStatement.addBatch(); // Use batch for efficiency
+                }
+            }
+
+            // Execute batch inserts
+            cakesStatement.executeBatch();
+            drinksStatement.executeBatch();
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to insert order and products into the database", e);
         }
     }
 
@@ -125,15 +120,6 @@ public class OrderDBRepository extends DBRepository<Order> {
 
     @Override
     public void delete(Integer id) {
-        // Delete from ClientOrders
-        String deleteClientOrderSql = "DELETE FROM ClientOrders WHERE orderID = ?";
-        try (PreparedStatement statement = connection.prepareStatement(deleteClientOrderSql)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting client-order relationship", e);
-        }
-
         // Delete from OrderedDrinks
         String deleteOrderedDrinksSql = "DELETE FROM OrderedDrinks WHERE orderID = ?";
         try (PreparedStatement statement = connection.prepareStatement(deleteOrderedDrinksSql)) {
